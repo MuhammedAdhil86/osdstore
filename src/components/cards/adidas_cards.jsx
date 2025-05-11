@@ -1,3 +1,4 @@
+// ProductList.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FiShoppingCart } from "react-icons/fi";
@@ -9,7 +10,6 @@ import ad1 from "../contents/card_img/ad1.jpeg";
 import ad2 from "../contents/card_img/ad2.jpeg";
 import ad3 from "../contents/card_img/ad3.jpeg";
 
-// Define brands with their respective products
 const brands = [
   {
     name: "Adidas",
@@ -37,7 +37,7 @@ const brands = [
   },
 ];
 
-export default function BrandSliders() {
+export default function ProductList() {
   const navigate = useNavigate();
 
   const handleAddToCart = (product) => {
@@ -67,7 +67,6 @@ export default function BrandSliders() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           viewport={{ once: true }}
         >
-          {/* Brand Name and View All */}
           <div className="flex items-center justify-between">
             <div className="flex-grow text-left lg:text-center pb-4">
               <span className="lg:font-semibold text-3xl sm:text-4xl font-bold md:text-4xl lg:text-5xl ">
@@ -82,7 +81,6 @@ export default function BrandSliders() {
             </motion.span>
           </div>
 
-          {/* Product Slider */}
           <Slider {...settings}>
             {brand.products.map((product, i) => (
               <motion.div

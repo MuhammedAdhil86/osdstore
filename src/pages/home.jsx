@@ -1,8 +1,8 @@
 
 
 import Bigcards from "../components/cards/bigcard"
-import New_arrivals_card from "../components/cards/new_arrivals_card";
-import Adidas_card from "../components/cards/adidas_cards";
+import ProductList from "../components/cards/adidas_cards"
+
 
 import Footer from "../components/footer/footer"
 
@@ -12,7 +12,7 @@ const Home = () => {
     
          
            <Bigcards/>
-           <Adidas_card/>
+           <ProductList/>
            <Footer/>
           
         </div>

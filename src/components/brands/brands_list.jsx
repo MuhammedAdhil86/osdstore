@@ -29,42 +29,42 @@ const staticBrands = [
   {
     name: "ALMOST GODS",
     image: image1,
-    link: "/collections/nike",
+
   },
   {
     name: "ASICS",
     image: image2,
-    link: "/collections/adidas",
+    
   },
   {
     name: "CROCKS",
     image: image3,
-    link: "/collections/puma",
+  
   },
   {
     name: "CONVERSE",
     image: image4,
-    link: "/collections/reebok",
+  
   },
   {
     name: "JORDAN",
     image: image5,
-    link: "/collections/new-balance",
+  
   },
   {
     name: "NIKE",
     image: image6,
-    link: "/collections/new-balance",
+    
   },
   {
     name: "PUMA",
     image: image7,
-    link: "/collections/new-balance",
+    
   },
   {
     name: "REBOOK",
     image: image8,
-    link: "/collections/new-balance",
+  
   },
  
 
@@ -103,7 +103,7 @@ const BrandsGrid = () => {
           <p className="col-span-full text-center text-gray-500">
             No categories available.
           </p>
-        ) : (
+        ) : ( 
           brands.map((brand, index) => (
             <motion.a
               key={index}
