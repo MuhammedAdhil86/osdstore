@@ -168,8 +168,8 @@ export default function AllProductsList() {
             <img src={product.image} alt={product.name} className="lg:w-full lg:h-48 object-cover mb-4" />
             <h2 className="text-lg md:text-xl font-semibold text-center w-34 h-12">{product.name}</h2>
             <p className="text-md md:text-lg font-bold mt-2 text-center">Rs. {product.price}</p>
-            <button className="flex items-center mt-3 bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800 w-full justify-center">
-              <FiShoppingCart className="mr-2" /> Add to cart
+            <button className="flex items-center mt-3 bg-black text-white md:py-2 lg:py-2 lg:px-4 md:px-4  rounded-md hover:bg-gray-800 w-full justify-center ">
+              <FiShoppingCart className="mr-2 " /> Add to cart
             </button>
           </motion.div>
         ))}
