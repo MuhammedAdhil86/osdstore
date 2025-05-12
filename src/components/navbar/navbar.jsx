@@ -199,12 +199,11 @@ export default function Navbar() {
     </Link>
 
 
-<Link to="/order">
-    <button className="flex flex-col items-center hover:text-blue-600">
-      <RiOrderPlayFill size={24} />
-      <span className="text-xs">Order</span>
-    </button>
-    </Link>
+    <Link to="/order" className="flex flex-col items-center hover:text-blue-600">
+  <RiOrderPlayFill size={24} />
+  <span className="text-xs">Order</span>
+</Link>
+
     <Link to="/cart" className="flex flex-col items-center hover:text-blue-600">
       <LuShoppingCart size={24} />
       <span className="text-xs">Cart</span>
