@@ -13,6 +13,7 @@ import ContactUs from "../pages/contactus";
 import LoginForm from "../components/login/login";
 import BrandsGrid from "../components/brands/brands_list";
 import ProductsPage from "../components/category-product/category-product";  // Make sure this file exists
+import OrderList from "../components/order/orderlist";
 
 const router = createBrowserRouter([
   {
@@ -30,11 +31,13 @@ const router = createBrowserRouter([
       { path: "/signup", element: <Register /> },
       { path: "/contact", element: <ContactUs /> },
       { path: "/login", element: <LoginForm /> },
+      { path: "/order", element: <OrderList /> },
+
 
       // Route for the brands grid (categories styled as brands)
       { path: "/brands", element: <BrandsGrid /> },
       // Route for listing products in a category
-      { path: "/products/:categorySlug", element: <ProductsPage /> },
+      { path: "/product",element: <ProductsPage /> },
 
     ],
   },

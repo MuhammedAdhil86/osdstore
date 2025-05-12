@@ -51,10 +51,10 @@ export default function Navbar() {
   <button className="hover:text-blue-600" onClick={() => setIsSearchOpen(!isSearchOpen)}>
     <Search size={24} />
   </button>
-  <button className="hover:text-blue-600 hidden sm:inline-block">
+  <button  Link className="hover:text-blue-600 hidden sm:inline-block">
     <Heart size={24} />
   </button>
-  <Link to="/cart" className="hidden sm:inline-flex hover:text-blue-600">
+  <Link to="/order" className="hidden sm:inline-flex hover:text-blue-600">
     <ShoppingBag size={24} />
   </Link>
 </div>
