@@ -1,16 +1,23 @@
 import React, { useState, memo } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
+import delivered from '../../img/nb-tumb/add-thumnail (2).jpeg';
+import shipped from '../../img/nb-tumb/add-thumnail (3).jpeg';
+import cancelled from '../../img/nb-tumb/add-thumnail (4).jpeg';
+import returned from '../../img/nb-tumb/add-thumnail(1).jpeg';
+
+// Mock orders
 const ordersMock = [
   {
     id: '5220712134013222',
     date: '04/02/2023 10:50 am',
     status: 'Delivered',
     product: {
-      name: 'NUUA S4 Pro 5G Chrome Silver 6GB+128GB',
+      name: 'New Balance classic 520',
       price: 299,
       qty: 1,
-      image: '/phone.jpg',
+      image: delivered,
     },
   },
   {
@@ -18,10 +25,10 @@ const ordersMock = [
     date: '04/02/2023 11:00 am',
     status: 'Shipped',
     product: {
-      name: 'NUUA S4 Pro 5G Chrome Silver 6GB+128GB',
+      name: 'New Balance classic 520',
       price: 299,
       qty: 1,
-      image: '/phone.jpg',
+      image: shipped,
     },
   },
   {
@@ -29,10 +36,10 @@ const ordersMock = [
     date: '04/02/2023 11:10 am',
     status: 'Cancelled',
     product: {
-      name: 'NUUA S4 Pro 5G Chrome Silver 6GB+128GB',
+      name: 'New Balance classic 520',
       price: 299,
       qty: 1,
-      image: '/phone.jpg',
+      image: cancelled,
     },
   },
   {
@@ -40,15 +47,27 @@ const ordersMock = [
     date: '04/02/2023 11:20 am',
     status: 'Returned',
     product: {
-      name: 'NUUA S4 Pro 5G Chrome Silver 6GB+128GB',
+      name: 'New Balance classic 520',
       price: 299,
       qty: 1,
-      image: '/phone.jpg',
+      image: returned,
     },
   },
 ];
 
+// Available status filters
 const statuses = ['All', 'Shipped', 'Delivered', 'Cancelled', 'Returned'];
+
+// Mapping order status to step number
+const statusStepMap = {
+  Placed: 0,
+  Packed: 1,
+  Trucked: 2,
+  Shipped: 2,
+  Delivered: 3,
+  Returned: 3,
+  Cancelled: -1, // special case
+};
 
 const OrderList = () => {
   const [selected, setSelected] = useState('All');
@@ -72,16 +91,16 @@ const OrderList = () => {
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto lg:mt-36 md:mt-36 sm:mt-16 mt-16 lg:mb-1 md:mb-2 mb-14">
+    <div className="p-6 max-w-3xl mx-auto mt-16 mb-16">
       <h2 className="text-xl font-semibold mb-4">My Orders</h2>
 
-      {/* Filter tabs */}
-      <div className="flex space-x-4 mb-6 lg:border-b md:border-b sm:border-b border-b pb-2 ">
+      {/* Filter Tabs */}
+      <div className="flex space-x-4 mb-6 pb-2">
         {statuses.map(status => (
           <button
             key={status}
             onClick={() => setSelected(status)}
-            className={`px-3 py-1 border-b-2 ${
+            className={`px-3 py-1 border-b-2 transition-colors ${
               selected === status
                 ? 'border-black text-black font-semibold'
                 : 'border-transparent text-gray-500'
@@ -92,11 +111,11 @@ const OrderList = () => {
         ))}
       </div>
 
-      {/* Orders list */}
+      {/* Orders List */}
       {filteredOrders.map((order, index) => (
         <motion.div
           key={order.id}
-          className="border rounded-lg p-4 mb-4 shadow-sm w-full lg:w-full md:w-full sm:w"
+          className="border rounded-lg p-4 mb-4 shadow-sm w-full"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
@@ -104,11 +123,15 @@ const OrderList = () => {
             type: 'spring',
             stiffness: 100,
             damping: 25,
-            delay: index * 0.1, // adds a staggered effect for smooth transitions
+            delay: index * 0.1,
           }}
         >
           <div className="flex justify-between items-center mb-2">
-            <div className={`text-white text-sm px-2 py-1 rounded ${statusColor(order.status)}`}>
+            <div
+              className={`text-white text-sm px-2 py-1 rounded ${statusColor(
+                order.status
+              )}`}
+            >
               {order.status}
             </div>
           </div>
@@ -124,7 +147,9 @@ const OrderList = () => {
               className="w-16 h-16 object-cover rounded"
             />
             <div className="flex-1">
-              <div className="font-medium text-gray-900">{order.product.name}</div>
+              <div className="font-medium text-gray-900">
+                {order.product.name}
+              </div>
               <div className="text-gray-500 text-sm">
                 ${order.product.price} × {order.product.qty}
               </div>
@@ -134,9 +159,15 @@ const OrderList = () => {
               <div className="font-semibold text-lg text-gray-800">
                 ${order.product.price}
               </div>
-              <button className="mt-2 border px-3 py-1 text-sm rounded hover:bg-gray-100">
-                Order Details
-              </button>
+
+              {/* Link to Order Tracker with step passed */}
+              <Link
+                to={`/ordertracker?step=${statusStepMap[order.status] ?? 0}&status=${order.status}&id=${order.id}`}
+              >
+                <button className="mt-2 border px-3 py-1 text-sm rounded hover:bg-gray-100">
+                  Order Details
+                </button>
+              </Link>
             </div>
           </div>
         </motion.div>
@@ -145,5 +176,4 @@ const OrderList = () => {
   );
 };
 
-// Memoize the component to prevent unnecessary re-renders
 export default memo(OrderList);
