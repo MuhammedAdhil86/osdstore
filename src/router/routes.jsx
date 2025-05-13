@@ -15,6 +15,7 @@ import BrandsGrid from "../components/brands/brands_list";
 import ProductsPage from "../components/category-product/category-product";  // Make sure this file exists
 import OrderList from "../components/order/orderlist";
 import OrderTracker from "../components/order/ordertracker";
+import ProfilePage from "../pages/profilepage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
       { path: "/login", element: <LoginForm /> },
       { path: "/order", element: <OrderList /> },
       { path: "/ordertracker", element: <OrderTracker /> },
+      { path: "/profile", element: <ProfilePage /> },
 
 
       // Route for the brands grid (categories styled as brands)

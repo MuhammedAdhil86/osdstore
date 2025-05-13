@@ -7,7 +7,8 @@ import { LuShoppingCart } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
 import { RiOrderPlayFill } from "react-icons/ri";
 import { Tag, TrendingUp, Mail, Info,Home } from "lucide-react";
-import bgImage from '../../img/profile_Background/bg.jpg';
+import { FiEdit2 } from 'react-icons/fi';
+
 
 
 
@@ -32,7 +33,7 @@ export default function Navbar() {
         {/* Top Bar (Desktop Hidden Section) */}
         <div className="w-full py-4 items-center justify-between px-6 md:flex hidden">
           <div>
-            <Link to={'/signup'}>
+            <Link to={'/profile'}>
             <button className="hover:text-blue-600 hidden sm:inline-block">
               <User2Icon size={24} />
             </button>
@@ -137,20 +138,28 @@ export default function Navbar() {
     </button>
 
     {/* ✅ Profile Section with Background */}
-    <div
-       className="mt-8"
-    >
-      <div className="flex items-center space-x-4 bg-white/80 rounded-md p-2">
+    <div className="flex items-center space-x-4 p-4 rounded-lg">
+      {/* Profile Image with Edit Icon */}
+      <Link to="/profile">
+      <div className="relative w-16 h-16">
         <img
-          src="https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?w=700&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D"
- 
+          src="https://randomuser.me/api/portraits/men/32.jpg" // Replace with your image
           alt="Profile"
-          className="w-12 h-12 rounded-full object-cover"
+          className="w-16 h-16 rounded-full object-cover"
         />
-        <div className="text-sm text-gray-800">
-          <div className="font-semibold">Violet Norman</div>
-          <div className="text-xs text-gray-600">bayer_martin@yahoo.com</div>
-        </div>
+         <button className="absolute bottom-0 right-0 bg-white rounded-full p-1 shadow-md">
+          <FiEdit2 size={14} className="text-gray-600" />
+        </button>
+       
+        <button className="absolute bottom-0 right-0 bg-white rounded-full p-1 shadow-md">
+          <FiEdit2 size={14} className="text-gray-600" />
+        </button>
+      </div>
+      </Link>
+      {/* User Info */}
+      <div>
+        <div className="text-lg font-medium text-gray-900">Your name</div>
+        <div className="text-sm text-gray-500">yourname@gmail.com</div>
       </div>
     </div>
 

@@ -3,15 +3,36 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 import delivered from '../../img/nb-tumb/add-thumnail (2).jpeg';
-import shipped from '../../img/nb-tumb/add-thumnail (3).jpeg';
-import cancelled from '../../img/nb-tumb/add-thumnail (4).jpeg';
-import returned from '../../img/nb-tumb/add-thumnail(1).jpeg';
+import trucked from '../../img/nb-tumb/add-thumnail (3).jpeg';
+import placed from '../../img/nb-tumb/add-thumnail (4).jpeg';
 
-// Mock orders
+// Updated mock orders with only required statuses
 const ordersMock = [
   {
     id: '5220712134013222',
     date: '04/02/2023 10:50 am',
+    status: 'Placed',
+    product: {
+      name: 'New Balance classic 520',
+      price: 299,
+      qty: 1,
+      image: placed,
+    },
+  },
+  {
+    id: '5220712134013223',
+    date: '04/02/2023 11:00 am',
+    status: 'Trucked',
+    product: {
+      name: 'New Balance classic 520',
+      price: 299,
+      qty: 1,
+      image: trucked,
+    },
+  },
+  {
+    id: '5220712134013224',
+    date: '04/02/2023 11:10 am',
     status: 'Delivered',
     product: {
       name: 'New Balance classic 520',
@@ -20,71 +41,34 @@ const ordersMock = [
       image: delivered,
     },
   },
-  {
-    id: '5220712134013223',
-    date: '04/02/2023 11:00 am',
-    status: 'Shipped',
-    product: {
-      name: 'New Balance classic 520',
-      price: 299,
-      qty: 1,
-      image: shipped,
-    },
-  },
-  {
-    id: '5220712134013224',
-    date: '04/02/2023 11:10 am',
-    status: 'Cancelled',
-    product: {
-      name: 'New Balance classic 520',
-      price: 299,
-      qty: 1,
-      image: cancelled,
-    },
-  },
-  {
-    id: '5220712134013225',
-    date: '04/02/2023 11:20 am',
-    status: 'Returned',
-    product: {
-      name: 'New Balance classic 520',
-      price: 299,
-      qty: 1,
-      image: returned,
-    },
-  },
 ];
 
-// Available status filters
-const statuses = ['All', 'Shipped', 'Delivered', 'Cancelled', 'Returned'];
+// Show only relevant status filters
+const statuses = ['All', 'Placed', 'Trucked', 'Delivered'];
 
-// Mapping order status to step number
+// Step mapping
 const statusStepMap = {
   Placed: 0,
-  Packed: 1,
-  Trucked: 2,
-  Shipped: 2,
-  Delivered: 3,
-  Returned: 3,
-  Cancelled: -1, // special case
+  Trucked: 1,
+  Delivered: 2,
 };
 
 const OrderList = () => {
   const [selected, setSelected] = useState('All');
 
   const filteredOrders =
-    selected === 'All' ? ordersMock : ordersMock.filter(o => o.status === selected);
+    selected === 'All'
+      ? ordersMock
+      : ordersMock.filter(o => o.status === selected);
 
   const statusColor = status => {
     switch (status) {
+      case 'Placed':
+        return 'bg-blue-400';
+      case 'Trucked':
+        return 'bg-yellow-500';
       case 'Delivered':
         return 'bg-green-600';
-      case 'Shipped':
-        return 'bg-yellow-500';
-      case 'Cancelled':
-        return 'bg-red-500';
-      case 'Returned':
-        return 'bg-blue-500';
       default:
         return 'bg-gray-400';
     }
@@ -118,7 +102,6 @@ const OrderList = () => {
           className="border rounded-lg p-4 mb-4 shadow-sm w-full"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
           transition={{
             type: 'spring',
             stiffness: 100,
@@ -160,7 +143,7 @@ const OrderList = () => {
                 ${order.product.price}
               </div>
 
-              {/* Link to Order Tracker with step passed */}
+              {/* Link to Order Tracker */}
               <Link
                 to={`/ordertracker?step=${statusStepMap[order.status] ?? 0}&status=${order.status}&id=${order.id}`}
               >
