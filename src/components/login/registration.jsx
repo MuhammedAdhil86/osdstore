@@ -1,12 +1,13 @@
 import React from "react";
 import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import bgImage from "../../img/login/domino-studio-164_6wVEHfI-unsplash.jpg";
 
 const Register = () => {
   return (
     <div className="min-h-screen flex mt-0 lg:mt-20">
       {/* Left Image Section */}
-      <div className="w-1/2 hidden md:block relative bg-teal-700">
+      <div className="w-1/2 hidden md:block relative ">
         <div className="absolute inset-0 bg-black opacity-40 z-10"></div>
         <img
           src={bgImage}
@@ -57,9 +58,11 @@ const Register = () => {
 
           <p className="text-sm text-center text-gray-500">
             Already have an account?{" "}
-            <a href="/login" className="text-blue-600 hover:underline">
+            <Link to="/login">
+            <a className="text-blue-600 hover:underline">
               Log in
-            </a>
+            </a></Link>
+          
           </p>
 
           {/* Social Icons */}

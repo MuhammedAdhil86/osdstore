@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const OtpVerification = () => {
   const [email, setEmail] = useState("");
@@ -28,9 +29,12 @@ const OtpVerification = () => {
       <div className="bg-white rounded-xl shadow-md w-full max-w-sm p-6">
         {!emailSubmitted ? (
           <>
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">Email Verification</h2>
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">
+              Email Verification
+            </h2>
             <p className="text-sm text-gray-600 mb-6">
-              Please enter your email address to receive a 4-digit verification code.
+              Please enter your email address to receive a 4-digit verification
+              code.
             </p>
             <form onSubmit={handleEmailSubmit} className="space-y-4">
               <input
@@ -51,10 +55,15 @@ const OtpVerification = () => {
           </>
         ) : (
           <>
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">Check your email</h2>
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">
+              Check your email
+            </h2>
             <p className="text-sm text-gray-600 mb-6">
               Please enter the 4-digit verification code that was sent to{" "}
-              <span className="font-medium text-gray-900">{submittedEmail}</span>. The code is valid for 10 minutes.
+              <span className="font-medium text-gray-900">
+                {submittedEmail}
+              </span>
+              . The code is valid for 10 minutes.
             </p>
 
             <form onSubmit={handleOtpSubmit} className="space-y-4">
@@ -87,16 +96,14 @@ const OtpVerification = () => {
                   />
                 </div>
               )}
-<Link to="/signup">
-
-<button
-                type="submit"
-                className="w-full py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
-              >
-                Continue
-              </button>
-</Link>
-           
+              <Link to="/signup">
+                <button
+                  type="submit"
+                  className="w-full py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
+                >
+                  Continue
+                </button>
+              </Link>
             </form>
           </>
         )}
