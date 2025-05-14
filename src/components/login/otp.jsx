@@ -87,13 +87,16 @@ const OtpVerification = () => {
                   />
                 </div>
               )}
+<Link to="/signup">
 
-              <button
+<button
                 type="submit"
                 className="w-full py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
               >
                 Continue
               </button>
+</Link>
+           
             </form>
           </>
         )}
