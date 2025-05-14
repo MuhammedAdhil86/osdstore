@@ -16,6 +16,7 @@ import ProductsPage from "../components/category-product/category-product";  // 
 import OrderList from "../components/order/orderlist";
 import OrderTracker from "../components/order/ordertracker";
 import ProfilePage from "../pages/profilepage";
+import OtpVerification from "../components/login/otp";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
       { path: "/order", element: <OrderList /> },
       { path: "/ordertracker", element: <OrderTracker /> },
       { path: "/profile", element: <ProfilePage /> },
+      { path: "/otpsent", element: <OtpVerification /> },
 
 
       // Route for the brands grid (categories styled as brands)

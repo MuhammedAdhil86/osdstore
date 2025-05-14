@@ -140,22 +140,21 @@ export default function Navbar() {
     {/* ✅ Profile Section with Background */}
     <div className="flex items-center space-x-4 p-4 rounded-lg">
       {/* Profile Image with Edit Icon */}
-      <Link to="/profile">
       <div className="relative w-16 h-16">
         <img
           src="https://randomuser.me/api/portraits/men/32.jpg" // Replace with your image
           alt="Profile"
           className="w-16 h-16 rounded-full object-cover"
-        />
+        /><Link to="/profile">
          <button className="absolute bottom-0 right-0 bg-white rounded-full p-1 shadow-md">
           <FiEdit2 size={14} className="text-gray-600" />
         </button>
-       
+        </Link>
         <button className="absolute bottom-0 right-0 bg-white rounded-full p-1 shadow-md">
           <FiEdit2 size={14} className="text-gray-600" />
         </button>
       </div>
-      </Link>
+
       {/* User Info */}
       <div>
         <div className="text-lg font-medium text-gray-900">Your name</div>

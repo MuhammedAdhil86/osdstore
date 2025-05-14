@@ -1,32 +1,105 @@
-import { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
 
-const VerifyOtp = () => {
-    const [email, setEmail] = useState('');
-    const [otp, setOtp] = useState('');
-    const navigate = useNavigate();
+const OtpVerification = () => {
+  const [email, setEmail] = useState("");
+  const [submittedEmail, setSubmittedEmail] = useState("");
+  const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const [firstCode, setFirstCode] = useState("");
+  const [secondCodeVisible, setSecondCodeVisible] = useState(false);
+  const [secondCode, setSecondCode] = useState("");
 
-    const handleVerify = async (e) => {
-        e.preventDefault();
-        try {
-            await axios.post('http://127.0.0.1:8000/api/accounts/verify-otp/', { email, otp });
-            navigate('/login');
-        } catch (error) {
-            console.error(error);
-        }
-    };
+  const handleEmailSubmit = (e) => {
+    e.preventDefault();
+    if (email.trim()) {
+      setEmailSubmitted(true);
+      setSubmittedEmail(email.trim());
+    }
+  };
 
-    return (
-        <div className="flex justify-center items-center h-screen bg-gray-100">
-            <form onSubmit={handleVerify} className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold">Verify OTP</h2>
-                <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-2 border rounded mt-2" required />
-                <input type="text" placeholder="Enter OTP" value={otp} onChange={(e) => setOtp(e.target.value)} className="w-full p-2 border rounded mt-2" required />
-                <button type="submit" className="w-full bg-green-500 text-white p-2 mt-3 rounded">Verify</button>
+  const handleOtpSubmit = (e) => {
+    e.preventDefault();
+    if (firstCode.length === 4) {
+      setSecondCodeVisible(true);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="bg-white rounded-xl shadow-md w-full max-w-sm p-6">
+        {!emailSubmitted ? (
+          <>
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">Email Verification</h2>
+            <p className="text-sm text-gray-600 mb-6">
+              Please enter your email address to receive a 4-digit verification code.
+            </p>
+            <form onSubmit={handleEmailSubmit} className="space-y-4">
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
+              <button
+                type="submit"
+                className="w-full py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
+              >
+                Submit
+              </button>
             </form>
-        </div>
-    );
+          </>
+        ) : (
+          <>
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">Check your email</h2>
+            <p className="text-sm text-gray-600 mb-6">
+              Please enter the 4-digit verification code that was sent to{" "}
+              <span className="font-medium text-gray-900">{submittedEmail}</span>. The code is valid for 10 minutes.
+            </p>
+
+            <form onSubmit={handleOtpSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Verification code *
+                </label>
+                <input
+                  type="text"
+                  maxLength={4}
+                  value={firstCode}
+                  onChange={(e) => setFirstCode(e.target.value)}
+                  placeholder="Enter code"
+                  className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+
+              {secondCodeVisible && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Re-enter verification code *
+                  </label>
+                  <input
+                    type="text"
+                    maxLength={4}
+                    value={secondCode}
+                    onChange={(e) => setSecondCode(e.target.value)}
+                    placeholder="Re-enter code"
+                    className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  />
+                </div>
+              )}
+
+              <button
+                type="submit"
+                className="w-full py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
+              >
+                Continue
+              </button>
+            </form>
+          </>
+        )}
+      </div>
+    </div>
+  );
 };
 
-export default VerifyOtp;
+export default OtpVerification;
