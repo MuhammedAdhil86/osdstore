@@ -1,141 +1,117 @@
 import React, { useState } from 'react';
-import { Trash2 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import cartimg1 from '../../img/nb-tumb/add-thumnail (2).jpeg';
-import cartimg2 from '../../img/nb-tumb/add-thumnail (3).jpeg';
-import cartimg3 from '../../img/nb-tumb/add-thumnail (4).jpeg';
+const CartItem = ({ item, onUpdateQuantity, onRemove }) => (
+  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white rounded-xl shadow-sm p-4 mb-4">
+    <div className="flex items-start gap-4 w-full sm:w-auto">
+      <img src={item.image} alt={item.title} className="w-16 h-16 rounded-md object-cover" />
+      <div>
+        <h3 className="font-semibold text-base sm:text-lg">{item.title}</h3>
+        <p className="text-sm text-gray-600">Size: {item.size}</p>
+        <p className="text-sm text-gray-600">Color: {item.color}</p>
+      </div>
+    </div>
+    <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-4 mt-4 sm:mt-0 w-full sm:w-auto justify-between sm:justify-end">
+      <div className="flex items-center gap-2 border rounded-full px-2">
+        <button
+          onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
+          className="w-6 h-6 rounded-full flex items-center justify-center"
+        >
+          -
+        </button>
+        <span>{item.quantity}</span>
+        <button
+          onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+          className="w-6 h-6 rounded-full flex items-center justify-center"
+        >
+          +
+        </button>
+      </div>
+      <p className="text-base sm:text-lg font-semibold">${item.price * item.quantity}</p>
+      <button onClick={() => onRemove(item.id)} className="text-red-500 text-lg sm:text-xl">🗑️</button>
+    </div>
+  </div>
+);
 
-const initialCartItems = [
-    { id: 1, name: 'Nb 500', price: 50, quantity: 1, image: cartimg1 },
-    { id: 2, name: 'Product Two', price: 30, quantity: 1, image: cartimg2 },
-    { id: 3, name: 'Product Three', price: 30, quantity: 2, image: cartimg3 },
-];
-
-const validCoupons = {
-    "SAVE10": 10,
-    "WELCOME20": 20
+const OrderSummary = ({ subtotal }) => {
+  return (
+    <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 w-full md:w-1/3">
+      <h2 className="text-lg sm:text-xl font-semibold mb-4">Order Summary</h2>
+      <div className="flex justify-between mb-4 text-sm sm:text-base">
+        <span>Subtotal</span>
+        <span>${subtotal.toFixed(2)}</span>
+      </div>
+      <div className="flex justify-between font-bold text-base sm:text-lg mb-4">
+        <span>Total</span>
+        <span>${subtotal.toFixed(2)}</span>
+      </div>
+      <Link to="/checkout">
+      <button className="w-full bg-black text-white py-2 sm:py-3 rounded-full font-semibold text-sm sm:text-base">Go to Checkout →</button>
+      </Link>
+    </div>
+  );
 };
 
-const Cartitem = () => {
-    const navigate = useNavigate();
-    const [cartItems, setCartItems] = useState(initialCartItems);
-    const [couponCode, setCouponCode] = useState('');
-    const [discount, setDiscount] = useState(0);
-    const [couponError, setCouponError] = useState('');
+const ShoppingCart = () => {
+  const [items, setItems] = useState([
+    {
+      id: 1,
+      image: "https://via.placeholder.com/64x64.png?text=Tee",
+      title: "Gradient Graphic T-shirt",
+      size: "Large",
+      color: "White",
+      price: 145,
+      quantity: 1,
+    },
+    {
+      id: 2,
+      image: "https://via.placeholder.com/64x64.png?text=Shirt",
+      title: "Checkered Shirt",
+      size: "Medium",
+      color: "Red",
+      price: 180,
+      quantity: 1,
+    },
+    {
+      id: 3,
+      image: "https://via.placeholder.com/64x64.png?text=Jeans",
+      title: "Skinny Fit Jeans",
+      size: "Large",
+      color: "Blue",
+      price: 240,
+      quantity: 1,
+    },
+  ]);
 
-    const updateQuantity = (id, delta) => {
-        setCartItems(items =>
-            items.map(item =>
-                item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
-            )
-        );
-    };
+  const updateQuantity = (id, quantity) => {
+    if (quantity < 1) return;
+    setItems(items.map(item => item.id === id ? { ...item, quantity } : item));
+  };
 
-    const removeItem = (id) => {
-        setCartItems(items => items.filter(item => item.id !== id));
-    };
+  const removeItem = (id) => {
+    setItems(items.filter(item => item.id !== id));
+  };
 
-    const applyCoupon = () => {
-        if (validCoupons[couponCode]) {
-            setDiscount(validCoupons[couponCode]);
-            setCouponError('');
-        } else {
-            setDiscount(0);
-            setCouponError('Invalid coupon code');
-        }
-    };
+  const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-    const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    const discountAmount = (subtotal * discount) / 100;
-    const total = (subtotal - discountAmount).toFixed(2);
-
-    return (
-        <div className="min-h-screen bg-gray-50 p-4 md:p-8 mt-20 lg:mt-32 md:mt-28 sm:mt-24">
-            <div className="max-w-6xl mx-auto bg-white p-7 rounded-lg shadow-xl flex flex-col lg:flex-row gap-6">
-                
-                {/* Cart Items Section */}
-                <div className="flex-1">
-                    <h1 className="text-2xl md:text-3xl font-bold mb-6 text-gray-800">Shopping Cart</h1>
-
-                    <div className="space-y-4">
-                        {cartItems.map(item => (
-                            <div key={item.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white p-4 border rounded-lg shadow-sm mt-4">
-                                <div className="flex items-center gap-6">
-                                    <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded-lg" />
-                                    <div>
-                                        <h3 className="font-semibold text-lg text-gray-800">{item.name}</h3>
-                                        <p className="text-gray-600">${item.price.toFixed(2)}</p>
-                                    </div>
-                                </div>
-
-                                {/* Quantity & Remove Button */}
-                                <div className="flex items-center gap-4">
-                                    {/* Quantity Control */}
-                                    <div className="flex items-center border rounded-lg overflow-hidden">
-                                        <button onClick={() => updateQuantity(item.id, -1)} className="px-3 py-2 bg-gray-200 hover:bg-gray-300">-</button>
-                                        <span className="px-4 py-2 bg-white">{item.quantity}</span>
-                                        <button onClick={() => updateQuantity(item.id, 1)} className="px-3 py-2 bg-gray-200 hover:bg-gray-300">+</button>
-                                    </div>
-
-                                    {/* Remove Item */}
-                                    <button onClick={() => removeItem(item.id)} className="text-red-500 hover:text-red-700">
-                                        <Trash2 size={22} />
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Summary & Coupon Section */}
-                <div className="w-full lg:w-80 bg-gray-100 p-6 rounded-lg shadow-inner">
-                    <h2 className="text-xl font-semibold mb-4 text-gray-800">Order Summary</h2>
-
-                    <div className="space-y-3">
-                        <div className="flex justify-between">
-                            <span>Subtotal</span>
-                            <span className="font-medium">${subtotal.toFixed(2)}</span>
-                        </div>
-
-                        {discount > 0 && (
-                            <div className="flex justify-between text-green-600">
-                                <span>Discount ({discount}%)</span>
-                                <span>- ${discountAmount.toFixed(2)}</span>
-                            </div>
-                        )}
-
-                        <div className="flex justify-between font-semibold text-lg">
-                            <span>Total</span>
-                            <span>${total}</span>
-                        </div>
-                    </div>
-
-                    {/* Coupon Code */}
-                    <div className="mt-6">
-                        <h3 className="text-md font-medium mb-2">Apply Coupon</h3>
-                        <div className="flex">
-                            <input
-                                type="text"
-                                value={couponCode}
-                                onChange={(e) => setCouponCode(e.target.value)}
-                                className="flex-1 border rounded-l-lg p-2"
-                                placeholder="Enter coupon code"
-                            />
-                            <button onClick={applyCoupon} className="bg-blue-600 text-white px-4 py-2 rounded-r-lg hover:bg-blue-700">Apply</button>
-                        </div>
-                        {couponError && <p className="text-red-500 mt-2">{couponError}</p>}
-                        {discount > 0 && <p className="text-green-600 mt-2">Coupon applied! {discount}% off</p>}
-                    </div>
-
-                    {/* Checkout Button */}
-                    <button onClick={() => navigate("/checkout")} className="mt-6 w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold text-lg">
-                        Proceed to Checkout
-                    </button>
-                </div>
-            </div>
+  return (
+    <div className="min-h-screen bg-gray-100 p-4 sm:p-6 md:p-12 mt-16 lg:mt-28 md:mt-28 sm:mt-16">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">YOUR CART</h1>
+      <div className="flex flex-col md:flex-row gap-6 sm:gap-8">
+        <div className="w-full md:w-2/3">
+          {items.map(item => (
+            <CartItem
+              key={item.id}
+              item={item}
+              onUpdateQuantity={updateQuantity}
+              onRemove={removeItem}
+            />
+          ))}
         </div>
-    );
+        <OrderSummary subtotal={subtotal} />
+      </div>
+    </div>
+  );
 };
 
-export default Cartitem;
+export default ShoppingCart;

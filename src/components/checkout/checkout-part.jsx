@@ -20,26 +20,16 @@ export default function CheckoutPart() {
   });
 
   const [errors, setErrors] = useState({});
+  const [couponCode, setCouponCode] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const [couponError, setCouponError] = useState("");
 
   const deliveryCharge = 150;
-  const couponDiscount = 50;
-
-  const handleQuantityChange = (id, delta) => {
-    setItems(items.map(item => 
-      item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
-    ));
-  };
-
-  const handleRemoveItem = (id) => {
-    setItems(prevItems => prevItems.filter(item => item.id !== id));
-  };
-
-  const subTotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const total = subTotal + deliveryCharge - couponDiscount;
+  const couponDiscount = discount > 0 ? (items.reduce((sum, item) => sum + item.price * item.quantity, 0) * discount) / 100 : 50;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" }); // Clear error on input change
+    setErrors({ ...errors, [e.target.name]: "" });
   };
 
   const validateForm = () => {
@@ -68,7 +58,6 @@ export default function CheckoutPart() {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      // Ensure items are not empty before proceeding
       if (items.length === 0) {
         alert("Your cart is empty. Please add items before proceeding.");
         return;
@@ -78,42 +67,57 @@ export default function CheckoutPart() {
     }
   };
 
+  const applyCoupon = () => {
+    if (couponCode === "SAVE10" ) {
+      setDiscount(10);
+      setCouponError("");
+    } else if (couponCode.trim() === "") {
+      setCouponError("Please enter a coupon code");
+    } else {
+      setCouponError("Invalid coupon code");
+      setDiscount(0);
+    }
+  };
+
+  const subTotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const total = subTotal + deliveryCharge - couponDiscount;
+
   return (
-    <div className="p-6 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:mt-36 md:mb-7 sm:mt-20 sm:mb-7 mt-20 mb-7">
-      {/* Left Section - Contact & Address */}
+    <div className="p-4 md:p-6 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2  sm:mt-20 gap-6 md:mt-40 lg:mt-40 mb-7 mt-24">
+      {/* Left Section */}
       <div>
         <div className="border p-4 rounded-lg shadow-sm">
           <h3 className="font-semibold">Contact Details</h3>
-          <p className="mt-2 flex items-center gap-2">
+          <p className="mt-2 flex items-center gap-2 text-sm text-gray-700">
             <FaUser /> Muhammed Achill | <FaPhone /> 8138976784
           </p>
         </div>
 
         <div className="border p-4 rounded-lg shadow-sm mt-4">
           <h3 className="font-semibold">Address</h3>
-          <p className="text-sm text-gray-500">Please add your address</p>
-          <div className="grid gap-2 mt-2">
-            <input 
-              className="border p-2 rounded w-full" 
-              placeholder="Name" 
+          <p className="text-sm text-gray-500 mb-2">Please add your address</p>
+          <div className="grid gap-2">
+            <input
+              className="border p-2 rounded w-full"
+              placeholder="Name"
               name="name"
               value={formData.name}
               onChange={handleChange}
             />
             {errors.name && <p className="text-red-600 text-sm">{errors.name}</p>}
 
-            <input 
-              className="border p-2 rounded w-full" 
-              placeholder="Mobile Number" 
+            <input
+              className="border p-2 rounded w-full"
+              placeholder="Mobile Number"
               name="mobile"
               value={formData.mobile}
               onChange={handleChange}
             />
             {errors.mobile && <p className="text-red-600 text-sm">{errors.mobile}</p>}
 
-            <input 
-              className="border p-2 rounded w-full" 
-              placeholder="Address" 
+            <input
+              className="border p-2 rounded w-full"
+              placeholder="Address"
               name="address"
               value={formData.address}
               onChange={handleChange}
@@ -121,69 +125,92 @@ export default function CheckoutPart() {
             {errors.address && <p className="text-red-600 text-sm">{errors.address}</p>}
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-              <input 
-                className="border p-2 rounded" 
-                placeholder="Pin Code" 
+              <input
+                className="border p-2 rounded"
+                placeholder="Pin Code"
                 name="pinCode"
                 value={formData.pinCode}
                 onChange={handleChange}
               />
-              {errors.pinCode && <p className="text-red-600 text-sm col-span-3">{errors.pinCode}</p>}
-
-              <input 
-                className="border p-2 rounded" 
-                placeholder="City" 
+              <input
+                className="border p-2 rounded"
+                placeholder="City"
                 name="city"
                 value={formData.city}
                 onChange={handleChange}
               />
-              {errors.city && <p className="text-red-600 text-sm col-span-3">{errors.city}</p>}
-
-              <input 
-                className="border p-2 rounded" 
-                placeholder="State" 
+              <input
+                className="border p-2 rounded"
+                placeholder="State"
                 name="state"
                 value={formData.state}
                 onChange={handleChange}
               />
-              {errors.state && <p className="text-red-600 text-sm col-span-3">{errors.state}</p>}
             </div>
+            {errors.pinCode && <p className="text-red-600 text-sm">{errors.pinCode}</p>}
+            {errors.city && <p className="text-red-600 text-sm">{errors.city}</p>}
+            {errors.state && <p className="text-red-600 text-sm">{errors.state}</p>}
           </div>
         </div>
+
+     
       </div>
 
-      {/* Right Section - Order Summary */}
-      <div className="border p-4 rounded-lg shadow-sm">
-        <div className="flex justify-between items-center border-b pb-2">
-          <h3 className="font-semibold">Items ({items.length})</h3>
-        </div>
-
-        {items.map(item => (
-          <div key={item.id} className="mt-4 border-b pb-2">
-            <div className="flex justify-between">
-              <p>{item.name}</p>
-              <p className="font-bold">₹{item.price}</p>
+      {/* Right section could be order summary / cart list (if needed) */}
+      <div className="border p-4 rounded-lg shadow-sm flex flex-col justify-between">
+        <div>
+          <h3 className="font-semibold mb-4">Order Summary</h3>
+          {items.map(item => (
+            <div key={item.id} className="flex justify-between text-sm mb-2">
+              <span>{item.name} x{item.quantity}</span>
+              <span>₹{item.price * item.quantity}</span>
             </div>
-
-            {/* Quantity */}
-            <div className="flex items-center gap-2 mt-2">
-              <button className="border px-2" onClick={() => handleQuantityChange(item.id, -1)}>-</button>
-              <span>{item.quantity}</span>
-              <button className="border px-2" onClick={() => handleQuantityChange(item.id, 1)}>+</button>
-              <button className="text-red-600 ml-auto" onClick={() => handleRemoveItem(item.id)}>Remove</button>
-            </div>
+          ))}
+          <hr className="my-2" />
+          <div className="flex justify-between">
+            <span>Subtotal</span>
+            <span>₹{subTotal}</span>
           </div>
-        ))}
-
-        {/* Continue Button */}
-        <div className="col-span-1 md:col-span-2 text-center">
-          <button 
-            className="w-full bg-blue-600 text-white py-2 rounded mt-4" 
-            onClick={handleSubmit}
-          >
-            Continue
-          </button>
+        
+          <div className="flex justify-between text-green-600">
+            <span>Discount</span>
+            <span>-₹{couponDiscount}</span>
+          </div>
+          <hr className="my-2" />
+          <div className="flex justify-between font-bold text-lg">
+            <span>Total</span>
+            <span>₹{total}</span>
+          </div>
+             {/* Coupon Code */}
+        <div className="mt-6 border p-4 rounded-lg shadow-sm">
+          <h3 className="text-md font-medium mb-2">Apply Coupon</h3>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <input
+              type="text"
+              value={couponCode}
+              onChange={(e) => setCouponCode(e.target.value)}
+              className="border p-2 rounded flex-1"
+              placeholder="Enter coupon code"
+            />
+            <button
+              onClick={applyCoupon}
+              className="bg-black text-white px-4 py-2 rounded hover:bg-black"
+            >
+              Apply
+            </button>
+          </div>
+          {couponError && <p className="text-red-500 mt-2">{couponError}</p>}
+          {discount > 0 && (
+            <p className="text-green-600 mt-2">Coupon applied! {discount}% off</p>
+          )}
         </div>
+        </div>
+        <button
+          onClick={handleSubmit}
+          className="mt-4 bg-black text-white py-3 rounded font-semibold hover:bg-gray-800"
+        >
+          Proceed to Review
+        </button>
       </div>
     </div>
   );
