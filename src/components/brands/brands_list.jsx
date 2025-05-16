@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import image1 from "../../img/brand-logo/almond.png"
-import image2 from "../../img/brand-logo/asis.png"
-import image3 from "../../img/brand-logo/crocks.png"
-import image4 from "../../img/brand-logo/cverse.png"
-import image5 from "../../img/brand-logo/jordan.png"
-import image6 from "../../img/brand-logo/nike.png"
-import image7 from "../../img/brand-logo/puma.png"
-import image8 from "../../img/brand-logo/reebok.png"
+import image1 from "../../img/brand-logo/almond.png";
+import image2 from "../../img/brand-logo/asis.png";
+import image3 from "../../img/brand-logo/crocks.png";
+import image4 from "../../img/brand-logo/cverse.png";
+import image5 from "../../img/brand-logo/jordan.png";
+import image6 from "../../img/brand-logo/nike.png";
+import image7 from "../../img/brand-logo/puma.png";
+import image8 from "../../img/brand-logo/reebok.png";
+
+// IMPORTANT: Make sure file names in "img/brand-logo" exactly match
+// These must be lowercase if imported like that (Linux is case-sensitive)
 
 // Animation configs
 const containerVariants = {
@@ -26,55 +29,20 @@ const itemVariants = {
 
 // Static brand data
 const staticBrands = [
-  {
-    name: "ALMOST GODS",
-    image: image1,
-
-  },
-  {
-    name: "ASICS",
-    image: image2,
-    
-  },
-  {
-    name: "CROCKS",
-    image: image3,
-  
-  },
-  {
-    name: "CONVERSE",
-    image: image4,
-  
-  },
-  {
-    name: "JORDAN",
-    image: image5,
-  
-  },
-  {
-    name: "NIKE",
-    image: image6,
-    
-  },
-  {
-    name: "PUMA",
-    image: image7,
-    
-  },
-  {
-    name: "REBOOK",
-    image: image8,
-  
-  },
- 
-
+  { name: "ALMOST GODS", image: image1 },
+  { name: "ASICS", image: image2 },
+  { name: "CROCKS", image: image3 },
+  { name: "CONVERSE", image: image4 },
+  { name: "JORDAN", image: image5 },
+  { name: "NIKE", image: image6 },
+  { name: "PUMA", image: image7 },
+  { name: "REBOOK", image: image8 },
 ];
 
 const BrandsGrid = () => {
   const [brands, setBrands] = useState([]);
 
   useEffect(() => {
-    // Directly set static brands instead of fetching from API
     setBrands(staticBrands);
   }, []);
 
@@ -103,11 +71,11 @@ const BrandsGrid = () => {
           <p className="col-span-full text-center text-gray-500">
             No categories available.
           </p>
-        ) : ( 
+        ) : (
           brands.map((brand, index) => (
             <motion.a
               key={index}
-              href={brand.link}
+              href={brand.link || "#"} // ✅ Prevent href crash
               className="flex flex-col items-center flex-wrap"
               variants={itemVariants}
               whileHover={{ scale: 1.1 }}

@@ -1,19 +1,33 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { FaTimes, FaEye, FaEyeSlash } from "react-icons/fa";
 
 import bgImage from "../../img/login/domino-studio-164_6wVEHfI-unsplash.jpg";
 import Footer from "../footer/footer";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
-  const togglePassword = () => {
-    setShowPassword(!showPassword);
+  const togglePassword = () => setShowPassword(!showPassword);
+
+  const handleClose = () => {
+    navigate("/"); // Redirect to homepage or desired route
   };
 
   return (
     <>
-      <div className="flex flex-col md:flex-row sm:mt-12 mt-11 lg:mt-32 md:mt-32 mb-0 lg:mb-0 md:mb-0">
+      <div className="relative flex flex-col md:flex-row sm:mt-12 mt-11 lg:mt-32 md:mt-32 mb-0 lg:mb-0 md:mb-0">
+
+        {/* X Button using FaTimes */}
+        <button
+          onClick={handleClose}
+          className="absolute top-10 right-5 z-50 text-black hover:text-white p-2 transition-all duration-300 ease-in-out hover:scale-110"
+          aria-label="Close"
+        >
+          <FaTimes className="w-5 h-5" />
+        </button>
+
         {/* Left Side - Login Form */}
         <div className="flex-1 flex items-center justify-center p-6 bg-white">
           <div className="max-w-md w-full space-y-6">
@@ -49,23 +63,9 @@ const LoginForm = () => {
                     tabIndex={-1}
                   >
                     {showPassword ? (
-                      // Eye Open SVG
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                      </svg>
+                      <FaEye className="w-5 h-5" />
                     ) : (
-                      // Eye Closed SVG
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                          d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.965 9.965 0 012.442-4.162m3.1-2.317A9.969 9.969 0 0112 5c4.478 0 8.268 2.943 9.542 7a9.96 9.96 0 01-4.507 5.385M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                          d="M3 3l18 18" />
-                      </svg>
+                      <FaEyeSlash className="w-5 h-5" />
                     )}
                   </button>
                 </div>
@@ -87,8 +87,8 @@ const LoginForm = () => {
               </button>
 
               <p className="text-center text-sm">
-  Don’t have an account? <Link to="/otpsent" className="text-blue-700 hover:underline">Register here</Link>
-</p>
+                Don’t have an account? <Link to="/otpsent" className="text-blue-700 hover:underline">Register here</Link>
+              </p>
             </form>
           </div>
         </div>
