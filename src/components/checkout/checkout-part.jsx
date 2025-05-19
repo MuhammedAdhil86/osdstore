@@ -24,8 +24,20 @@ export default function CheckoutPart() {
   const [discount, setDiscount] = useState(0);
   const [couponError, setCouponError] = useState("");
 
-  const deliveryCharge = 150;
-  const couponDiscount = discount > 0 ? (items.reduce((sum, item) => sum + item.price * item.quantity, 0) * discount) / 100 : 50;
+  // Define valid coupons and their corresponding discounts
+  const validCoupons = {
+    SAVE10: 10,
+    SAVE20: 20
+  };
+
+  const subTotal = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  const couponDiscount = discount > 0 ? (subTotal * discount) / 100 : 0;
+
+  const total = subTotal - couponDiscount;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -68,22 +80,21 @@ export default function CheckoutPart() {
   };
 
   const applyCoupon = () => {
-    if (couponCode === "SAVE10" ) {
-      setDiscount(10);
+    const code = couponCode.trim().toUpperCase();
+    if (validCoupons.hasOwnProperty(code)) {
+      setDiscount(validCoupons[code]);
       setCouponError("");
-    } else if (couponCode.trim() === "") {
+    } else if (code === "") {
       setCouponError("Please enter a coupon code");
+      setDiscount(0);
     } else {
       setCouponError("Invalid coupon code");
       setDiscount(0);
     }
   };
 
-  const subTotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const total = subTotal + deliveryCharge - couponDiscount;
-
   return (
-    <div className="p-4 md:p-6 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2  sm:mt-20 gap-6 md:mt-40 lg:mt-40 mb-7 mt-24">
+    <div className="p-4 md:p-6 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 sm:mt-20 gap-6 md:mt-40 lg:mt-40 mb-7 mt-24">
       {/* Left Section */}
       <div>
         <div className="border p-4 rounded-lg shadow-sm">
@@ -104,7 +115,9 @@ export default function CheckoutPart() {
               value={formData.name}
               onChange={handleChange}
             />
-            {errors.name && <p className="text-red-600 text-sm">{errors.name}</p>}
+            {errors.name && (
+              <p className="text-red-600 text-sm">{errors.name}</p>
+            )}
 
             <input
               className="border p-2 rounded w-full"
@@ -113,7 +126,9 @@ export default function CheckoutPart() {
               value={formData.mobile}
               onChange={handleChange}
             />
-            {errors.mobile && <p className="text-red-600 text-sm">{errors.mobile}</p>}
+            {errors.mobile && (
+              <p className="text-red-600 text-sm">{errors.mobile}</p>
+            )}
 
             <input
               className="border p-2 rounded w-full"
@@ -122,7 +137,9 @@ export default function CheckoutPart() {
               value={formData.address}
               onChange={handleChange}
             />
-            {errors.address && <p className="text-red-600 text-sm">{errors.address}</p>}
+            {errors.address && (
+              <p className="text-red-600 text-sm">{errors.address}</p>
+            )}
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               <input
@@ -147,22 +164,28 @@ export default function CheckoutPart() {
                 onChange={handleChange}
               />
             </div>
-            {errors.pinCode && <p className="text-red-600 text-sm">{errors.pinCode}</p>}
-            {errors.city && <p className="text-red-600 text-sm">{errors.city}</p>}
-            {errors.state && <p className="text-red-600 text-sm">{errors.state}</p>}
+            {errors.pinCode && (
+              <p className="text-red-600 text-sm">{errors.pinCode}</p>
+            )}
+            {errors.city && (
+              <p className="text-red-600 text-sm">{errors.city}</p>
+            )}
+            {errors.state && (
+              <p className="text-red-600 text-sm">{errors.state}</p>
+            )}
           </div>
         </div>
-
-     
       </div>
 
-      {/* Right section could be order summary / cart list (if needed) */}
+      {/* Right Section */}
       <div className="border p-4 rounded-lg shadow-sm flex flex-col justify-between">
         <div>
           <h3 className="font-semibold mb-4">Order Summary</h3>
-          {items.map(item => (
+          {items.map((item) => (
             <div key={item.id} className="flex justify-between text-sm mb-2">
-              <span>{item.name} x{item.quantity}</span>
+              <span>
+                {item.name} x{item.quantity}
+              </span>
               <span>₹{item.price * item.quantity}</span>
             </div>
           ))}
@@ -171,39 +194,48 @@ export default function CheckoutPart() {
             <span>Subtotal</span>
             <span>₹{subTotal}</span>
           </div>
-        
+
           <div className="flex justify-between text-green-600">
             <span>Discount</span>
-            <span>-₹{couponDiscount}</span>
+            <span>-₹{couponDiscount.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-green-600">Delivery Charge</span>
+            <span className="text-green-600">-₹0.00</span>
           </div>
           <hr className="my-2" />
           <div className="flex justify-between font-bold text-lg">
             <span>Total</span>
-            <span>₹{total}</span>
+            <span>₹{total.toFixed(2)}</span>
           </div>
-             {/* Coupon Code */}
-        <div className="mt-6 border p-4 rounded-lg shadow-sm">
-          <h3 className="text-md font-medium mb-2">Apply Coupon</h3>
-          <div className="flex flex-col sm:flex-row gap-2">
-            <input
-              type="text"
-              value={couponCode}
-              onChange={(e) => setCouponCode(e.target.value)}
-              className="border p-2 rounded flex-1"
-              placeholder="Enter coupon code"
-            />
-            <button
-              onClick={applyCoupon}
-              className="bg-black text-white px-4 py-2 rounded hover:bg-black"
-            >
-              Apply
-            </button>
+
+          {/* Coupon Code */}
+          <div className="mt-6 border p-4 rounded-lg shadow-sm">
+            <h3 className="text-md font-medium mb-2">Apply Coupon</h3>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <input
+                type="text"
+                value={couponCode}
+                onChange={(e) => setCouponCode(e.target.value)}
+                className="border p-2 rounded flex-1"
+                placeholder="Enter coupon code"
+              />
+              <button
+                onClick={applyCoupon}
+                className="bg-black text-white px-4 py-2 rounded hover:bg-black"
+              >
+                Apply
+              </button>
+            </div>
+            {couponError && (
+              <p className="text-red-500 mt-2">{couponError}</p>
+            )}
+            {discount > 0 && (
+              <p className="text-green-600 mt-2">
+                Coupon applied! {discount}% off
+              </p>
+            )}
           </div>
-          {couponError && <p className="text-red-500 mt-2">{couponError}</p>}
-          {discount > 0 && (
-            <p className="text-green-600 mt-2">Coupon applied! {discount}% off</p>
-          )}
-        </div>
         </div>
         <button
           onClick={handleSubmit}

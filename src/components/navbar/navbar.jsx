@@ -6,12 +6,8 @@ import { IoHomeOutline } from "react-icons/io5";
 import { LuShoppingCart } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
 import { RiOrderPlayFill } from "react-icons/ri";
-import { Tag, TrendingUp, Mail, Info,Home } from "lucide-react";
+import { Tag, TrendingUp, Mail, Info, Home } from "lucide-react";
 import { FiEdit2 } from 'react-icons/fi';
-
-
-
-
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,9 +30,9 @@ export default function Navbar() {
         <div className="w-full py-4 items-center justify-between px-6 md:flex hidden">
           <div>
             <Link to={'/profile'}>
-            <button className="hover:text-blue-600 hidden sm:inline-block">
-              <User2Icon size={24} />
-            </button>
+              <button className="hover:text-blue-600 hidden sm:inline-block">
+                <User2Icon size={24} />
+              </button>
             </Link>
           </div>
 
@@ -49,16 +45,16 @@ export default function Navbar() {
           </Link>
 
           <div className="flex items-center space-x-4 ml-auto">
-  <button className="hover:text-blue-600" onClick={() => setIsSearchOpen(!isSearchOpen)}>
-    <Search size={24} />
-  </button>
-  <button  Link className="hover:text-blue-600 hidden sm:inline-block">
-    <Heart size={24} />
-  </button>
-  <Link to="/order" className="hidden sm:inline-flex hover:text-blue-600">
-    <ShoppingBag size={24} />
-  </Link>
-</div>
+            <button className="hover:text-blue-600" onClick={() => setIsSearchOpen(!isSearchOpen)}>
+              <Search size={24} />
+            </button>
+            <button className="hover:text-blue-600 hidden sm:inline-block">
+              <Heart size={24} />
+            </button>
+            <Link to="/order" className="hidden sm:inline-flex hover:text-blue-600">
+              <ShoppingBag size={24} />
+            </Link>
+          </div>
 
         </div>
 
@@ -81,7 +77,6 @@ export default function Navbar() {
           </motion.div>
 
           {/* Desktop Menu Links */}
-          
           <ul className="hidden md:flex w-full text-smd lg:flex justify-around text-gray-500">
             {navItems.map((item, index) => (
               <motion.li
@@ -122,108 +117,103 @@ export default function Navbar() {
 
         {/* Mobile Menu (Hamburger Menu) */}
         {isOpen && (
-  <motion.div
-    initial={{ opacity: 0, y: -30 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -30 }}
-    transition={{ duration: 0.3 }}
-    className="md:hidden fixed inset-0 bg-white text-gray-900 z-50 p-6 overflow-y-auto"
-  >
-    <button
-      className="absolute top-6 right-6 text-gray-900"
-      onClick={() => setIsOpen(false)}
-      aria-label="Close menu"
-    >
-      <X size={28} />
-    </button>
-
-    {/* ✅ Profile Section with Background */}
-    <div className="flex items-center space-x-4 p-4 rounded-lg">
-      {/* Profile Image with Edit Icon */}
-      <div className="relative w-16 h-16">
-        <img
-          src="https://randomuser.me/api/portraits/men/32.jpg" // Replace with your image
-          alt="Profile"
-          className="w-16 h-16 rounded-full object-cover"
-        /><Link to="/profile">
-         <button className="absolute bottom-0 right-0 bg-white rounded-full p-1 shadow-md">
-          <FiEdit2 size={14} className="text-gray-600" />
-        </button>
-        </Link>
-        <button className="absolute bottom-0 right-0 bg-white rounded-full p-1 shadow-md">
-          <FiEdit2 size={14} className="text-gray-600" />
-        </button>
-      </div>
-
-      {/* User Info */}
-      <div>
-        <div className="text-lg font-medium text-gray-900">Your name</div>
-        <div className="text-sm text-gray-500">yourname@gmail.com</div>
-      </div>
-    </div>
-
-    {/* ✅ Existing Menu Items - unchanged */}
-    <ul className="flex flex-col space-y-4 mt-8">
-      {[
-        { name: "Home", icon: <Home size={20} />, path: "/" },
-        { name: "Products", icon: <ShoppingBag size={20} />, path: "/allproduct" },
-        { name: "Brands", icon: <Tag size={20} />, path: "/brand" },
-        { name: "Best Selling", icon: <TrendingUp size={20} />, path: "/best-selling" },
-        { name: "Contact Us", icon: <Mail size={20} />, path: "/contact" },
-        { name: "About Us", icon: <Info size={20} />, path: "/aboutus" },
-      ].map((item, index) => (
-        <motion.li
-          key={item.name}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: index * 0.1, duration: 0.4 }}
-        >
-          <Link
-            to={item.path}
-            onClick={() => setIsOpen(false)}
-            className="flex items-center mt-2 space-x-3 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors duration-200"
+          <motion.div
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden fixed inset-0 bg-white text-gray-900 z-50 p-6 overflow-y-auto"
           >
-            {item.icon}
-            <span className="text-base font-medium">{item.name}</span>
-          </Link>
-        </motion.li>
-      ))}
-    </ul>
-  </motion.div>
-)}
+            <button
+              className="absolute top-6 right-6 text-gray-900"
+              onClick={() => setIsOpen(false)}
+              aria-label="Close menu"
+            >
+              <X size={28} />
+            </button>
 
+            {/* ✅ Profile Section with Background */}
+            <div className="flex items-center space-x-4 p-4 rounded-lg">
+              {/* Profile Image with Edit Icon */}
+              <div className="relative w-16 h-16">
+                {/* Replace with your image */}
+                <img
+                  src="https://randomuser.me/api/portraits/men/32.jpg"
+                  alt="Profile"
+                  className="w-16 h-16 rounded-full object-cover"
+                />
+                <Link to="/profile">
+                  <button className="absolute bottom-0 right-0 bg-white rounded-full p-1 shadow-md">
+                    <FiEdit2 size={14} className="text-gray-600" />
+                  </button>
+                </Link>
+              </div>
 
+              {/* User Info */}
+              <div>
+                <div className="text-lg font-medium text-gray-900">Your name</div>
+                <div className="text-sm text-gray-500">yourname@gmail.com</div>
+              </div>
+            </div>
 
-            {/* Mobile Menu (Hamburger Menu) */}
+            {/* ✅ Existing Menu Items - unchanged */}
+            <ul className="flex flex-col space-y-4 mt-8">
+              {[
+                { name: "Home", icon: <Home size={20} />, path: "/" },
+                { name: "Products", icon: <ShoppingBag size={20} />, path: "/allproduct" },
+                { name: "Brands", icon: <Tag size={20} />, path: "/brand" },
+                { name: "Best Selling", icon: <TrendingUp size={20} />, path: "/best-selling" },
+                { name: "Contact Us", icon: <Mail size={20} />, path: "/contact" },
+                { name: "About Us", icon: <Info size={20} />, path: "/aboutus" },
+              ].map((item, index) => (
+                <motion.li
+                  key={item.name}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.4 }}
+                >
+                  <Link
+                    to={item.path}
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center mt-2 space-x-3 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors duration-200"
+                  >
+                    {item.icon}
+                    <span className="text-base font-medium">{item.name}</span>
+                  </Link>
+                </motion.li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+
       </nav>
 
       {/* Mobile Bottom Navigation */}
       <div className="fixed bottom-0 left-0 right-0 bg-slate-200 text-black p-4 md:hidden shadow-md z-40">
-  <div className="flex items-center justify-around font-semibold">
+        <div className="flex items-center justify-around font-semibold">
 
-    <Link to="/" className="flex flex-col items-center hover:text-blue-600">
-      <IoHomeOutline size={24} />
-      <span className="text-xs">Home</span>
-    </Link>
+          <Link to="/" className="flex flex-col items-center hover:text-blue-600">
+            <IoHomeOutline size={24} />
+            <span className="text-xs">Home</span>
+          </Link>
 
+          <Link to="/order" className="flex flex-col items-center hover:text-blue-600">
+            <RiOrderPlayFill size={24} />
+            <span className="text-xs">Order</span>
+          </Link>
 
-    <Link to="/order" className="flex flex-col items-center hover:text-blue-600">
-  <RiOrderPlayFill size={24} />
-  <span className="text-xs">Order</span>
-</Link>
+          <Link to="/cart" className="flex flex-col items-center hover:text-blue-600">
+            <LuShoppingCart size={24} />
+            <span className="text-xs">Cart</span>
+          </Link>
 
-    <Link to="/cart" className="flex flex-col items-center hover:text-blue-600">
-      <LuShoppingCart size={24} />
-      <span className="text-xs">Cart</span>
-    </Link>
+          <Link to="/profile" className="flex flex-col items-center hover:text-blue-600">
+            <FaRegUserCircle size={24} />
+            <span className="text-xs">Profile</span>
+          </Link>
 
-    <Link to="/profile" className="flex flex-col items-center hover:text-blue-600">
-      <FaRegUserCircle size={24} />
-      <span className="text-xs">Profile</span>
-    </Link>
-
-  </div>
-</div>
+        </div>
+      </div>
 
     </>
   );

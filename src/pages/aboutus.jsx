@@ -1,10 +1,13 @@
 import React from 'react'
-import AboutUsTop from '../components/aboutus/aboutitem'
+
+import AboutItem from '../components/aboutus/aboutitem'
+import Footer from '../components/footer/footer'
 
 export default function AboutUs() {
   return (
 <>
-<AboutUsTop/>
+<AboutItem/>
+<Footer/>
 
 
 
