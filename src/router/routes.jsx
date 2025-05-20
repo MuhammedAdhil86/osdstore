@@ -9,14 +9,13 @@ import AboutUs from "../pages/aboutus";
 import Checkout from "../pages/checkout";
 import ReviewOrder from "../pages/payment";
 import Register from "../components/login/registration";
-import ContactUs from "../pages/contactus";
-import LoginForm from "../components/login/login";
-import BrandsGrid from "../components/brands/brands_list";
+import ContactUs from "../pages/contactus";import BrandsGrid from "../components/brands/brands_list";
 import ProductsPage from "../components/category-product/category-product";  // Make sure this file exists
 import OrderList from "../components/order/orderlist";
 import OrderTracker from "../components/order/ordertracker";
 import ProfilePage from "../pages/profilepage";
 import OtpVerification from "../components/login/otp";
+import LoginPage from "../pages/loginpage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -32,11 +31,11 @@ const router = createBrowserRouter([
       { path: "/revieworder", element: <ReviewOrder /> },
       { path: "/signup", element: <Register /> },
       { path: "/contact", element: <ContactUs /> },
-      { path: "/login", element: <LoginForm /> },
       { path: "/order", element: <OrderList /> },
       { path: "/ordertracker", element: <OrderTracker /> },
       { path: "/profile", element: <ProfilePage /> },
       { path: "/otpsent", element: <OtpVerification /> },
+      { path: "/loginpage", element: <LoginPage /> },
 
 
       // Route for the brands grid (categories styled as brands)

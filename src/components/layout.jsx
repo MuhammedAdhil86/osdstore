@@ -1,31 +1,38 @@
 import Navbar from "./navbar/navbar";
-import { useEffect } from "react";
-import { Outlet , useNavigate} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Outlet, useLocation } from "react-router-dom";
+import LoginForm from "../components/login/login"; // Adjust path
 
 export default function Layout() {
-  const navigate = useNavigate();
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const location = useLocation();
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      const isLoggedIn = localStorage.getItem("authToken"); // change this if needed
+      const isLoggedIn = localStorage.getItem("authToken"); // Your auth logic here
 
-      // Optional: skip if already on login or signup
-      const currentPath = window.location.pathname;
-      const publicPaths = ["/login", "/signup", "/otpsent"];
-
-      if (!isLoggedIn && !publicPaths.includes(currentPath)) {
-        navigate("/login");
+      // Optionally exclude public paths
+      const publicPaths = ["/signup", "/otpsent"];
+      if (!isLoggedIn && !publicPaths.includes(location.pathname)) {
+        setShowLoginModal(true);
       }
-    }, 10000); // 10 seconds
+    }, 10000); // 10 seconds delay
 
     return () => clearTimeout(timer);
-  }, [navigate]);
+  }, [location]);
+
+  const closeLoginModal = () => {
+    setShowLoginModal(false);
+  };
 
   return (
     <>
       <Navbar />
-      <div> {/* Add margin to push content below fixed navbar */}
+      <div>
         <Outlet />
       </div>
+
+      {showLoginModal && <LoginForm onClose={closeLoginModal} />}
     </>
   );
 }
