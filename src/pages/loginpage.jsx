@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaTimes, FaEye, FaEyeSlash } from "react-icons/fa";
+import { useAuth } from "../context/AuthContext";  // Adjust path if needed
 
-import bgImage from "../img/login/domino-studio-164_6wVEHfI-unsplash.jpg"
-
+import bgImage from "../img/login/domino-studio-164_6wVEHfI-unsplash.jpg";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const togglePassword = () => setShowPassword(!showPassword);
 
@@ -15,11 +21,27 @@ const LoginPage = () => {
     navigate("/"); // Redirect to homepage or desired route
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      await login(email, password);
+      // login() should navigate automatically on success, but if not:
+      // navigate("/"); 
+    } catch (err) {
+      setError("Invalid email or password");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <div className="relative flex flex-col md:flex-row sm:mt-12 mt-11 lg:mt-32 md:mt-32 mb-0 lg:mb-0 md:mb-0">
 
-        {/* X Button using FaTimes */}
+        {/* X Button */}
         <button
           onClick={handleClose}
           className="absolute top-10 right-5 z-50 text-black hover:text-white p-2 transition-all duration-300 ease-in-out hover:scale-110"
@@ -38,13 +60,22 @@ const LoginPage = () => {
               </p>
             </div>
 
-            <form className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {error && (
+                <div className="text-red-600 text-sm font-medium">
+                  {error}
+                </div>
+              )}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700">Email *</label>
                 <input
                   type="email"
                   placeholder="Enter your mail address"
                   className="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
               </div>
 
@@ -55,6 +86,9 @@ const LoginPage = () => {
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter password"
                     className="mt-1 w-full px-4 py-3 pr-10 border rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
                   />
                   <button
                     type="button"
@@ -81,9 +115,12 @@ const LoginPage = () => {
 
               <button
                 type="submit"
-                className="w-full py-3 text-white bg-black hover:bg-gray-900 rounded-lg transition font-semibold"
+                disabled={loading}
+                className={`w-full py-3 text-white rounded-lg font-semibold transition ${
+                  loading ? "bg-gray-400 cursor-not-allowed" : "bg-black hover:bg-gray-900"
+                }`}
               >
-                Log In
+                {loading ? "Logging in..." : "Log In"}
               </button>
 
               <p className="text-center text-sm">
@@ -97,15 +134,14 @@ const LoginPage = () => {
         <div
           className="hidden md:block md:w-1/2 bg-cover bg-center"
           style={{
-            backgroundImage: {bgImage}
+            backgroundImage: `url(${bgImage})`
           }}
         >
           <div className="h-full w-full bg-black bg-opacity-20"></div>
         </div>
       </div>
-
-      
     </>
   );
 };
+
 export default LoginPage;

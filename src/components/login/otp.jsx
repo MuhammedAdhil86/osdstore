@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import api from "../../api/axios";
 
 const OtpVerification = () => {
   const [email, setEmail] = useState("");
@@ -8,19 +9,53 @@ const OtpVerification = () => {
   const [firstCode, setFirstCode] = useState("");
   const [secondCodeVisible, setSecondCodeVisible] = useState(false);
   const [secondCode, setSecondCode] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleEmailSubmit = (e) => {
+  const handleEmailSubmit = async (e) => {
     e.preventDefault();
-    if (email.trim()) {
+    if (!email.trim()) return;
+
+    try {
+      setLoading(true);
+      await api.post("/users/signup/send-otp/", { email: email.trim() });
       setEmailSubmitted(true);
       setSubmittedEmail(email.trim());
+    } catch (error) {
+      alert("Failed to send OTP. Please try again.");
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleOtpSubmit = (e) => {
+  const handleOtpSubmit = async (e) => {
     e.preventDefault();
-    if (firstCode.length === 4) {
-      setSecondCodeVisible(true);
+
+    if (firstCode.length !== 4 || secondCode.length !== 4) {
+      alert("Please enter the 4-digit code in both fields.");
+      return;
+    }
+
+    if (firstCode !== secondCode) {
+      alert("Codes do not match. Please try again.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await api.post("/users/signup/verify-otp/", {
+        email: submittedEmail,
+        otp: firstCode,
+      });
+
+      // Navigate to signup with verified email
+      navigate("/signup", { state: { email: submittedEmail } });
+    } catch (error) {
+      alert("Invalid OTP. Please try again.");
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -33,8 +68,7 @@ const OtpVerification = () => {
               Email Verification
             </h2>
             <p className="text-sm text-gray-600 mb-6">
-              Please enter your email address to receive a 4-digit verification
-              code.
+              Please enter your email address to receive a 4-digit verification code.
             </p>
             <form onSubmit={handleEmailSubmit} className="space-y-4">
               <input
@@ -47,9 +81,10 @@ const OtpVerification = () => {
               />
               <button
                 type="submit"
+                disabled={loading}
                 className="w-full py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
               >
-                Submit
+                {loading ? "Sending..." : "Send OTP"}
               </button>
             </form>
           </>
@@ -59,11 +94,9 @@ const OtpVerification = () => {
               Check your email
             </h2>
             <p className="text-sm text-gray-600 mb-6">
-              Please enter the 4-digit verification code that was sent to{" "}
-              <span className="font-medium text-gray-900">
-                {submittedEmail}
-              </span>
-              . The code is valid for 10 minutes.
+              Enter the 4-digit code sent to{" "}
+              <span className="font-medium text-gray-900">{submittedEmail}</span>. <br />
+              It’s valid for 10 minutes.
             </p>
 
             <form onSubmit={handleOtpSubmit} className="space-y-4">
@@ -75,7 +108,14 @@ const OtpVerification = () => {
                   type="text"
                   maxLength={4}
                   value={firstCode}
-                  onChange={(e) => setFirstCode(e.target.value)}
+                  onChange={(e) => {
+                    setFirstCode(e.target.value);
+                    if (e.target.value.length === 4) {
+                      setSecondCodeVisible(true);
+                    } else {
+                      setSecondCodeVisible(false);
+                    }
+                  }}
                   placeholder="Enter code"
                   className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
@@ -96,14 +136,14 @@ const OtpVerification = () => {
                   />
                 </div>
               )}
-              <Link to="/signup">
-                <button
-                  type="submit"
-                  className="w-full py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
-                >
-                  Continue
-                </button>
-              </Link>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
+              >
+                {loading ? "Verifying..." : "Continue"}
+              </button>
             </form>
           </>
         )}

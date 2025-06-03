@@ -1,29 +1,26 @@
+import React, { useEffect, useState } from "react";
 import Navbar from "./navbar/navbar";
-import { useEffect, useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
-import LoginForm from "../components/login/login"; // Adjust path
+import { Outlet } from "react-router-dom";
+import { useAuth } from "../context/AuthContext"; // Adjust path as necessary
+import Login from "../components/login/login"; // Your login modal component
 
 export default function Layout() {
+  const { user, loading } = useAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const isLoggedIn = localStorage.getItem("authToken"); // Your auth logic here
+    if (!loading && !user) {
+      const alreadyShown = sessionStorage.getItem("loginPopupShown");
+      if (!alreadyShown) {
+        const timer = setTimeout(() => {
+          setShowLoginModal(true);
+          sessionStorage.setItem("loginPopupShown", "true");
+        }, 10000);
 
-      // Optionally exclude public paths
-      const publicPaths = ["/signup", "/otpsent"];
-      if (!isLoggedIn && !publicPaths.includes(location.pathname)) {
-        setShowLoginModal(true);
+        return () => clearTimeout(timer);
       }
-    }, 10000); // 10 seconds delay
-
-    return () => clearTimeout(timer);
-  }, [location]);
-
-  const closeLoginModal = () => {
-    setShowLoginModal(false);
-  };
+    }
+  }, [loading, user]);
 
   return (
     <>
@@ -32,7 +29,7 @@ export default function Layout() {
         <Outlet />
       </div>
 
-      {showLoginModal && <LoginForm onClose={closeLoginModal} />}
+      {showLoginModal && <Login onClose={() => setShowLoginModal(false)} />}
     </>
   );
 }

@@ -9,17 +9,25 @@ import AboutUs from "../pages/aboutus";
 import Checkout from "../pages/checkout";
 import ReviewOrder from "../pages/payment";
 import Register from "../components/login/registration";
-import ContactUs from "../pages/contactus";import BrandsGrid from "../components/brands/brands_list";
-import ProductsPage from "../components/category-product/category-product";  // Make sure this file exists
+import ContactUs from "../pages/contactus";
+import BrandsGrid from "../components/brands/brands_list";
+import ProductsPage from "../components/category-product/category-product";
 import OrderList from "../components/order/orderlist";
 import OrderTracker from "../components/order/ordertracker";
-import ProfilePage from "../pages/profilepage";
+import Profile from "../components/login/profile";
 import OtpVerification from "../components/login/otp";
 import LoginPage from "../pages/loginpage";
+import BestSelling from "../pages/bestselling";
+import { AuthProvider } from "../context/AuthContext";  // Make sure this file exists
+
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: (
+      <AuthProvider>
+        <Layout />
+      </AuthProvider>
+    ),
     children: [
       { path: "/", element: <Home /> },
       { path: "/brand", element: <Brand /> },
@@ -33,16 +41,12 @@ const router = createBrowserRouter([
       { path: "/contact", element: <ContactUs /> },
       { path: "/order", element: <OrderList /> },
       { path: "/ordertracker", element: <OrderTracker /> },
-      { path: "/profile", element: <ProfilePage /> },
+      { path: "/profile", element: <Profile /> },
       { path: "/otpsent", element: <OtpVerification /> },
       { path: "/loginpage", element: <LoginPage /> },
-
-
-      // Route for the brands grid (categories styled as brands)
       { path: "/brands", element: <BrandsGrid /> },
-      // Route for listing products in a category
-      { path: "/product",element: <ProductsPage /> },
-
+      { path: "/product", element: <ProductsPage /> },
+      {path: "/bestselling", element: < BestSelling/>},
     ],
   },
 ]);
