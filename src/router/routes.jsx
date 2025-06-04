@@ -19,6 +19,7 @@ import OtpVerification from "../components/login/otp";
 import LoginPage from "../pages/loginpage";
 import BestSelling from "../pages/bestselling";
 import { AuthProvider } from "../context/AuthContext";  // Make sure this file exists
+import ForgotPassword from "../pages/forgetpassword";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,7 @@ const router = createBrowserRouter([
       { path: "/brands", element: <BrandsGrid /> },
       { path: "/product", element: <ProductsPage /> },
       {path: "/bestselling", element: < BestSelling/>},
+      {path: "/forget-password",element:<ForgotPassword/>},
     ],
   },
 ]);

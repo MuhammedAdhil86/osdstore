@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaTimes, FaEye, FaEyeSlash } from "react-icons/fa";
-import { useAuth } from "../context/AuthContext";  // Adjust path if needed
+import { useAuth } from "../context/AuthContext"; // Adjust path if needed
 
 import bgImage from "../img/login/domino-studio-164_6wVEHfI-unsplash.jpg";
 
@@ -15,7 +15,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const togglePassword = () => setShowPassword(!showPassword);
+  const togglePassword = () => setShowPassword((prev) => !prev);
 
   const handleClose = () => {
     navigate("/"); // Redirect to homepage or desired route
@@ -28,9 +28,9 @@ const LoginPage = () => {
 
     try {
       await login(email, password);
-      // login() should navigate automatically on success, but if not:
-      // navigate("/"); 
-    } catch (err) {
+      // If login does not redirect automatically, you can do it here:
+      // navigate("/");
+    } catch {
       setError("Invalid email or password");
     } finally {
       setLoading(false);
@@ -40,7 +40,6 @@ const LoginPage = () => {
   return (
     <>
       <div className="relative flex flex-col md:flex-row sm:mt-12 mt-11 lg:mt-32 md:mt-32 mb-0 lg:mb-0 md:mb-0">
-
         {/* X Button */}
         <button
           onClick={handleClose}
@@ -95,6 +94,7 @@ const LoginPage = () => {
                     onClick={togglePassword}
                     className="absolute inset-y-0 right-0 px-3 flex items-center text-gray-600 focus:outline-none"
                     tabIndex={-1}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? (
                       <FaEye className="w-5 h-5" />
@@ -110,7 +110,9 @@ const LoginPage = () => {
                   <input type="checkbox" className="form-checkbox text-purple-600" />
                   <span>Remember me</span>
                 </label>
-                <a href="#" className="text-blue-600 hover:underline">Forgot your password?</a>
+                <Link to="/forget-password" className="text-blue-600 hover:underline">
+                  Forgot your password?
+                </Link>
               </div>
 
               <button
@@ -124,7 +126,10 @@ const LoginPage = () => {
               </button>
 
               <p className="text-center text-sm">
-                Don’t have an account? <Link to="/otpsent" className="text-blue-700 hover:underline">Register here</Link>
+                Don’t have an account?{" "}
+                <Link to="/otpsent" className="text-blue-700 hover:underline">
+                  Register here
+                </Link>
               </p>
             </form>
           </div>
@@ -133,9 +138,7 @@ const LoginPage = () => {
         {/* Right Side - HD Image */}
         <div
           className="hidden md:block md:w-1/2 bg-cover bg-center"
-          style={{
-            backgroundImage: `url(${bgImage})`
-          }}
+          style={{ backgroundImage: `url(${bgImage})` }}
         >
           <div className="h-full w-full bg-black bg-opacity-20"></div>
         </div>

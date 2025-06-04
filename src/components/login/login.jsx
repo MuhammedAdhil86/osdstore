@@ -8,16 +8,20 @@ const Login = ({ onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [feedback, setFeedback] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { login } = useContext(AuthContext);
   const togglePassword = () => setShowPassword(!showPassword);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!email || !password) {
       setFeedback({ type: "error", message: "Please enter email and password." });
       return;
     }
+
+    setIsLoading(true);
 
     try {
       const user = await login(email, password);
@@ -29,6 +33,8 @@ const Login = ({ onClose }) => {
       } else {
         setFeedback({ type: "error", message: "Something went wrong. Please try again." });
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -103,7 +109,7 @@ const Login = ({ onClose }) => {
               {/* Forgot Password Link */}
               <div className="text-right mt-2">
                 <Link
-                  to="/forgot-password"
+                  to="/forget-password"
                   className="text-sm text-purple-600 hover:text-purple-800 font-medium"
                 >
                   Forgot password?
@@ -113,9 +119,14 @@ const Login = ({ onClose }) => {
 
             <button
               type="submit"
-              className="w-full py-3 text-white bg-black hover:bg-gray-900 rounded-lg transition font-semibold"
+              disabled={isLoading}
+              className={`w-full py-3 text-white rounded-lg transition font-semibold ${
+                isLoading
+                  ? "bg-gray-600 cursor-not-allowed"
+                  : "bg-black hover:bg-gray-900"
+              }`}
             >
-              Log In
+              {isLoading ? "Logging in..." : "Log In"}
             </button>
 
             {/* Register Link */}
