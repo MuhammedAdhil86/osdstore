@@ -133,7 +133,7 @@ const Login = ({ onClose }) => {
             <div className="text-center text-sm text-gray-600 mt-4">
               Don't have an account?{" "}
               <Link
-                to="/register"
+                to="/signup"
                 className="text-purple-600 hover:text-purple-800 font-medium transition"
               >
                 Register here
