@@ -2,7 +2,7 @@ import React from "react";
 import { Truck, RotateCw, HelpCircle, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import bgabout from "../../img/about/Orange_Sneakers_PNG_Clipart-391.png"
+import bgabout from "../../img/about/HAPPYPLACE-768x768 (1).jpg"
 
 /**
  * AboutUs Page – OSDSTORE
@@ -119,8 +119,9 @@ export default function AboutItem() {
         <h2 className="text-2xl font-bold text-black mb-4">Visit Us</h2>
         <div className="w-full h-96 rounded-2xl overflow-hidden shadow-lg">
           <iframe
-            title="Kollam Bus Stand Location"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3930.754025951949!2d76.58520337506565!3d8.885522291182112!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b05fd06c308b05f%3A0xd8e1e27989c08f11!2sKollam%20KSRTC%20Bus%20Station!5e0!3m2!1sen!2sin!4v1716133764383!5m2!1sen!2sin"
+            title="Osdstore.in unisex sneaker store"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3900.913504791404!2d76.53623081522514!3d9.060624798355725!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b06030036648f75%3A0x7ccec650983d0f70!2sOsdstore.in%20unisex%20sneaker%20store!5e0!3m2!1sen!2sin!4v1716497743250!5m2!1sen!2sin
+"
             width="100%"
             height="100%"
             style={{ border: 0 }}

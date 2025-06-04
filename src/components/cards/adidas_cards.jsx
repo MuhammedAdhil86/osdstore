@@ -85,26 +85,25 @@ export default function ProductList() {
             {brand.products.map((product, i) => (
               <motion.div
                 key={product.id}
-                className="bg-white"
+                className="bg-white rounded-lg cursor-pointer shadow-sm hover:shadow-md transition-shadow"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.2, duration: 0.6, ease: "easeOut" }}
                 viewport={{ once: true }}
+                onClick={() => handleAddToCart(product)}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
               >
-                <div className="relative w-full rounded-lg">
-                  <a href="#">
-                    <img
-                      className="h-60 w-full rounded-t-lg object-cover sm:w-[33rem] p-2"
-                      src={product.image}
-                      alt={product.name}
-                    />
-                  </a>
+                <div className="relative w-full">
+                  <img
+                    className="h-60 w-full rounded-t-lg object-cover sm:w-[33rem] p-2"
+                    src={product.image}
+                    alt={product.name}
+                  />
                   <div className="mt-4 px-5 pb-5">
-                    <a href="#">
-                      <h5 className="text-xl font-semibold tracking-tight text-slate-900">
-                        {product.name}
-                      </h5>
-                    </a>
+                    <h5 className="text-xl font-semibold tracking-tight text-slate-900">
+                      {product.name}
+                    </h5>
                     <div className="flex items-center justify-between mt-3">
                       <p>
                         <span className="text-3xl font-bold text-slate-900">
@@ -115,14 +114,15 @@ export default function ProductList() {
                         </span>
                       </p>
 
-                      <motion.button
+                      <button
                         className="flex items-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700"
-                        onClick={() => handleAddToCart(product)}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                        onClick={(e) => {
+                          e.stopPropagation(); // prevent parent click event
+                          handleAddToCart(product);
+                        }}
                       >
                         <FiShoppingCart className="mr-2" /> Shop Now
-                      </motion.button>
+                      </button>
                     </div>
                   </div>
                 </div>

@@ -20,6 +20,10 @@ import LoginPage from "../pages/loginpage";
 import BestSelling from "../pages/bestselling";
 import { AuthProvider } from "../context/AuthContext";  // Make sure this file exists
 import ForgotPassword from "../pages/forgetpassword";
+import ReturnPolicy from "../pages/returnpolicy";
+import FAQPage from "../pages/faq";
+import Delivery from "../pages/delivery";
+import ComingSoon from "../pages/comingsoon";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +53,10 @@ const router = createBrowserRouter([
       { path: "/product", element: <ProductsPage /> },
       {path: "/bestselling", element: < BestSelling/>},
       {path: "/forget-password",element:<ForgotPassword/>},
+      {path: "/return-policy", element:<ReturnPolicy/>},
+      {path: "/FAQ", element:<FAQPage/>},
+      {path:"/delivery" , element:<Delivery/>},
+      {path:"/soon" , element:<ComingSoon/>},
     ],
   },
 ]);

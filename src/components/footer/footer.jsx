@@ -14,7 +14,7 @@ const Footer = () => {
               <li><Link to="/" className="hover:text-gray-400">All Products</Link></li>
               <li><Link to="/brand" className="hover:text-gray-400">Brands</Link></li>
               <li><Link to="/bestselling" className="hover:text-gray-400">Best Selling</Link></li>
-              <li><Link to="/accessories" className="hover:text-gray-400">Accessories</Link></li>
+              <li><Link to="/soon" className="hover:text-gray-400">Accessories</Link></li>
             </ul>
           </div>
 
@@ -23,9 +23,9 @@ const Footer = () => {
             <h2 className="text-lg font-semibold mb-4">Company</h2>
             <ul className="space-y-2">
               <li><Link to="/aboutus" className="hover:text-gray-400">About Us</Link></li>
-              <li><Link to="/policy" className="hover:text-gray-400">policy</Link></li>
-              <li><Link to="/press" className="hover:text-gray-400">Press</Link></li>
-              <li><Link to="/blog" className="hover:text-gray-400">Blog</Link></li>
+              <li><Link to="/return-policy" className="hover:text-gray-400">policy</Link></li>
+              <li><Link to="/soon" className="hover:text-gray-400">Press</Link></li>
+              <li><Link to="/soon" className="hover:text-gray-400">Blog</Link></li>
             </ul>
           </div>
 
@@ -34,8 +34,8 @@ const Footer = () => {
             <h2 className="text-lg font-semibold mb-4">Support</h2>
             <ul className="space-y-2">
               <li><Link to="/contact" className="hover:text-gray-400">Contact Us</Link></li>
-              <li><Link to="/shipping" className="hover:text-gray-400">Shipping</Link></li>
-              <li><Link to="/returns" className="hover:text-gray-400">Returns</Link></li>
+              <li><Link to="/delivery" className="hover:text-gray-400">Delivery</Link></li>
+              <li><Link to="/return-policy" className="hover:text-gray-400">Returns policy</Link></li>
               <li><Link to="/faq" className="hover:text-gray-400">FAQ</Link></li>
             </ul>
           </div>
