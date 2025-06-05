@@ -136,7 +136,7 @@ export default function Navbar() {
             <div className="flex items-center space-x-4 p-4 rounded-lg">
               <div className="relative w-16 h-16">
                 <img
-                  src={user?.photoURL || "https://www.gravatar.com/avatar/?d=mp"}
+                  src={user?.image || "https://www.gravatar.com/avatar/?d=mp"}
                   alt="Profile"
                   className="w-16 h-16 rounded-full object-cover"
                 />

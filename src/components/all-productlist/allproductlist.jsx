@@ -1,325 +1,343 @@
-import { FiShoppingCart, FiFilter } from "react-icons/fi";
-import { motion } from "framer-motion";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import Image1 from "../../img/nb-tumb/add-thumnail (2).jpeg";
-import Image2 from "../../img/nb-tumb/add-thumnail (3).jpeg";
-import Image3 from "../../img/nb-tumb/add-thumnail (4).jpeg";
-import bannerbg from "../../img/about/istockphoto-1451389365-612x612.jpg";
+import React, { useState, useEffect } from "react";
+import { FaTimes } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import image1 from "../../img/nb-tumb/add-thumnail (2).jpeg";
+import image2 from "../../img/nb-tumb/add-thumnail (3).jpeg";
+import image3 from "../../img/nb-tumb/add-thumnail (4).jpeg";
+import image4 from "../../img/nb-tumb/add-thumnail(1).jpeg";
 
-const products = [
+const initialProducts = [
   {
-    name: "Nike Cosmic Unity ",
-    price: 459,
-    originalPrice: 699,
-    image: Image1,
-    brand: "Nike",
-    sizes: ["EU 44", "EU 45", "EU 46"],
-  },
-  {
-    name: "Nike Air Max Plus 3",
-    price: 799,
-    originalPrice: 999,
-    image: Image2,
-    brand: "Nike",
-    sizes: ["EU 42", "EU 43", "EU 44"],
-  },
-  {
-    name: "Adidas UltraBoost",
-    price: 899,
-    originalPrice: 1099,
-    image: Image3,
+    id: 1,
     brand: "Adidas",
-    sizes: ["EU 44", "EU 45"],
+    name: "574 Core",
+    price: 1100000,
+    offerprice: 1350000,
+    sizes: ["7", "8", "9"],
+    image: image1,
   },
   {
-    name: "Puma RS-X",
-    price: 499,
-    originalPrice: 799,
-    image: Image1,
-    brand: "Puma",
-    sizes: ["EU 41", "EU 42", "EU 45"],
+    id: 2,
+    brand: "New Balance",
+    name: "327 Retro",
+    price: 1220000,
+    offerprice: 1400000,
+    sizes: ["8", "9"],
+    image: image2,
   },
   {
-    name: "Nike Air Max Plus",
-    price: 379,
-    originalPrice: 599,
-    image: Image2,
-    brand: "Nike",
-    sizes: ["EU 43", "EU 45"],
+    id: 3,
+    brand: "New Balance",
+    name: "990v5 Made in USA",
+    price: 2200000,
+    offerprice: 2500000,
+    sizes: ["10", "11"],
+    image: image3,
   },
   {
-    name: "Adidas Superstar",
-    price: 359,
-    originalPrice: 499,
-    image: Image3,
-    brand: "Adidas",
-    sizes: ["EU 42", "EU 44"],
+    id: 4,
+    brand: "New Balance",
+    name: "9060 Gray Matter",
+    price: 1950000,
+    offerprice: 2300000,
+    sizes: ["9", "10"],
+    image: image4,
+  },
+  {
+    id: 5,
+    brand: "New Balance",
+    name: "550 White/Red",
+    price: 1320000,
+    offerprice: 1600000,
+    sizes: ["7", "8"],
+    image: image1,
+  },
+  {
+    id: 6,
+    brand: "New Balance",
+    name: "2002R Protection Pack",
+    price: 1750000,
+    offerprice: 2100000,
+    sizes: ["9", "10", "11"],
+    image: image2,
   },
 ];
 
-export default function AllProductsList() {
-  const [filter, setFilter] = useState({
-    size: "All",
-    price: 749,
-    brand: "All",
-  });
-  const [searchTerm, setSearchTerm] = useState("");
-  const [showMobileFilters, setShowMobileFilters] = useState(false);
+const AllProductsList = () => {
+  const [products] = useState(initialProducts);
+  const [filteredProducts, setFilteredProducts] = useState(initialProducts);
+  const [showFilter, setShowFilter] = useState(false);
+  const [showSort, setShowSort] = useState(false);
+  const [selectedSizes, setSelectedSizes] = useState([]);
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [priceRange, setPriceRange] = useState(3000000);
 
-  const filteredProducts = products.filter(
-    (product) =>
-      product.price <= filter.price &&
-      (filter.brand === "All" || product.brand === filter.brand) &&
-      (filter.size === "All" || product.sizes.includes(filter.size)) &&
-      product.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const handleAddToCart = (product) => {
-    console.log("Added to cart:", product);
+  const toggleFilter = () => {
+    setShowFilter(!showFilter);
+    setShowSort(false);
   };
 
+  const navigate = useNavigate();
+
+  const toggleSort = () => {
+    setShowSort(!showSort);
+    setShowFilter(false);
+  };
+
+  const handleSort = (type) => {
+    let sorted = [...filteredProducts];
+
+    switch (type) {
+      case "newest":
+        sorted.sort((a, b) => b.id - a.id);
+        break;
+      case "highToLow":
+        sorted.sort((a, b) => b.price - a.price);
+        break;
+      case "lowToHigh":
+        sorted.sort((a, b) => a.price - b.price);
+        break;
+      case "az":
+        sorted.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case "za":
+        sorted.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      default:
+        break;
+    }
+
+    setFilteredProducts(sorted);
+    setShowSort(false);
+  };
+
+  const handleSizeChange = (size) => {
+    setSelectedSizes((prev) =>
+      prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
+    );
+  };
+
+  const handleBrandChange = (brand) => {
+    setSelectedBrands((prev) =>
+      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
+    );
+  };
+
+  const handlePriceChange = (e) => {
+    setPriceRange(Number(e.target.value));
+  };
+
+  useEffect(() => {
+    let filtered = products.filter((product) => {
+      const matchBrand =
+        selectedBrands.length === 0 || selectedBrands.includes(product.brand);
+
+      // Check if any of the product's sizes are included in selectedSizes
+      const matchSize =
+        selectedSizes.length === 0 ||
+        product.sizes.some((size) => selectedSizes.includes(size));
+
+      const matchPrice = product.price <= priceRange;
+
+      return matchBrand && matchSize && matchPrice;
+    });
+
+    setFilteredProducts(filtered);
+  }, [products, selectedBrands, selectedSizes, priceRange]);
+
+  // Get unique brands dynamically and sort alphabetically
+  const uniqueBrands = Array.from(new Set(products.map((p) => p.brand))).sort();
+
+  // All sizes available across all products for filter UI
+  const allSizes = ["6", "7", "8", "9", "10", "11"];
+
   return (
-    <div className="p-4 mt-24 md:p-8 max-w-6xl mx-auto md:mt-32 mb-10">
-      {/* Responsive Heading */}
-      <h1 className="hidden sm:block text-2xl md:text-4xl lg::text-3xl font-bold text-slate-900 mb-2 text-left">
-        Explore Our Latest Sneakers Collection
-      </h1>
-
-      {/* heading and Filter Bar */}
-      <div className="w-full flex items-center justify-between gap-2 mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2 ml-8 mt-3 text-center sm:text-left sm:hidden m">
-          Explore Our Latest
+    <div className="p-4 sm:p-6 font-sans mt-16 lg:mt-32 md:mt-32 sm:mt-20 relative">
+      <div className="max-w-6xl mx-auto ">
+        {/* Mobile-only Heading (top) */}
+        <h1 className="block sm:hidden text-3xl font-bold mb-7 text-center border-b-2">
+          Explore our space
         </h1>
-        <button
-          className="flex sm:hidden bg-black p-3 rounded-full text-white"
-          onClick={() => setShowMobileFilters(true)}
-        >
-          <FiFilter size={20} />
-        </button>
-      </div>
+        {/* Controls */}
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-4 w-full relative">
+          {/* Centered Heading */}
+          <h1 className="absolute left-1/2 transform -translate-x-1/2 text-xl md:text-2xl font-semibold hidden sm:block">
+            Explore our space
+          </h1>
 
-      {/* Mobile Sale Banner */}
-      <div className="shadow-xl rounded-2xl p-4 flex items-center justify-between mb-6 sm:hidden">
-        <div>
-          <h2 className="text-lg font-semibold">Latest Arrival</h2>
-          <p className="text-sm text-gray-700"> All india free delivery</p>
-         <Link to="/Bestselling">
-         <button className="mt-2 px-4 py-2 bg-black text-white rounded-full text-xs">
-            Shop Now
-          </button>
-         </Link>
-        </div>
-        <img src={bannerbg} alt="Sale" className="h-24" />
-      </div>
+          {/* Left: Item count */}
+          <div className="flex items-center gap-2 min-w-0 overflow-hidden">
+            <span className="text-sm text-gray-500 tracking-wide font-medium whitespace-nowrap">
+              {filteredProducts.length} items found
+            </span>
+          </div>
 
-      {/* Mobile Brand Filter Buttons */}
-      <div className="flex gap-2 overflow-x-auto mb-6 sm:mb-0 sm:hidden ">
-        {["All", "Nike", "Adidas", "Puma", "Fila"].map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setFilter({ ...filter, brand: cat })}
-            className={`px-4 py-1 rounded-full text-sm whitespace-nowrap ${
-              filter.brand === cat
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
-
-      {/* Mobile Filter Modal */}
-      {showMobileFilters && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center sm:hidden">
-          <div className="bg-white w-[90%] max-w-md p-4 rounded-lg shadow-lg relative">
+          {/* Right: Filter & Sort */}
+          <div className="flex gap-2 shrink-0 ml-auto">
             <button
-              className="absolute top-2 right-2 text-gray-500 text-xl"
-              onClick={() => setShowMobileFilters(false)}
-              aria-label="Close filter modal"
+              onClick={toggleFilter}
+              className="px-4 py-2 border border-gray-300 text-sm font-medium tracking-wide rounded-md text-gray-700 hover:bg-gray-100 transition"
             >
-              &times;
+              FILTER
             </button>
-
-            <h2 className="text-lg font-semibold mb-4 text-slate-800">Filter Products</h2>
-
-            {/* Mobile Filter - Same as Desktop */}
-            <div className="flex flex-col gap-4 text-sm text-gray-600">
-
-              <label className="flex flex-col space-y-1">
-                <span className="font-medium">Size:</span>
-                <select
-                  className="border p-2 rounded"
-                  value={filter.size}
-                  onChange={(e) => setFilter({ ...filter, size: e.target.value })}
-                >
-                  <option value="All">All</option>
-                  {["EU 41", "EU 42", "EU 43", "EU 44", "EU 45", "EU 46"].map((sz) => (
-                    <option key={sz} value={sz}>{sz}</option>
-                  ))}
-                </select>
-              </label>
-
-              <label className="flex flex-col space-y-1">
-                <span className="font-medium">Price:</span>
-                <input
-                  type="range"
-                  min="1000"
-                  max="10000"
-                  value={filter.price}
-                  className="w-full"
-                  onChange={(e) =>
-                    setFilter({ ...filter, price: Number(e.target.value) })
-                  }
-                />
-                <span>Under ₹{filter.price}.00</span>
-              </label>
-
-              <label className="flex flex-col space-y-1">
-                <span className="font-medium">Brand:</span>
-                <select
-                  className="border p-2 rounded"
-                  value={filter.brand}
-                  onChange={(e) => setFilter({ ...filter, brand: e.target.value })}
-                >
-                  <option value="All">All</option>
-                  <option value="Nike">Nike</option>
-                  <option value="Adidas">Adidas</option>
-                  <option value="Puma">Puma</option>
-                </select>
-              </label>
-
-              <button
-                className="mt-4 bg-black text-white py-2 rounded-full"
-                onClick={() => setShowMobileFilters(false)}
-              >
-                Apply Filters
-              </button>
-            </div>
+            <button
+              onClick={toggleSort}
+              className="px-4 py-2 border border-gray-300 text-sm font-medium tracking-wide rounded-md text-gray-700 hover:bg-gray-100 transition"
+            >
+              Sort
+            </button>
           </div>
         </div>
-      )}
 
-      {/* Desktop Filters */}
-      <div className="hidden sm:flex flex-row items-center justify-start gap-8 text-sm text-gray-600 mb-6 whitespace-nowrap">
-        <label className="flex items-center space-x-2">
-          <span className="font-medium">Size:</span>
-          <select
-            className="border p-1 rounded w-24"
-            value={filter.size}
-            onChange={(e) => setFilter({ ...filter, size: e.target.value })}
-          >
-            <option value="All">All</option>
-            {["EU 41", "EU 42", "EU 43", "EU 44", "EU 45", "EU 46"].map((sz) => (
-              <option key={sz} value={sz}>
-                {sz}
-              </option>
-            ))}
-          </select>
-        </label>
+        {/* Filter Popup */}
+        {showFilter && (
+          <div className="absolute top-24 right-6 w-72 bg-white shadow-lg border rounded-xl p-4 z-50">
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="font-semibold text-sm">Filter Options</h3>
+              <button onClick={() => setShowFilter(false)}>
+                <FaTimes className="text-gray-600" />
+              </button>
+            </div>
 
-        <label className="flex items-center space-x-2">
-          <span className="font-medium">Price:</span>
-          <input
-            type="range"
-            min="1000"
-            max="10000"
-            value={filter.price}
-            className="w-40"
-            onChange={(e) =>
-              setFilter({ ...filter, price: Number(e.target.value) })
-            }
-          />
-          <span className="ml-2">Under ₹{filter.price}.00</span>
-        </label>
+            {/* Brand Filter */}
+            <div className="mb-4">
+              <h4 className="text-sm font-medium mb-2">Brand</h4>
+              {uniqueBrands.map((brand) => (
+                <label key={brand} className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={selectedBrands.includes(brand)}
+                    onChange={() => handleBrandChange(brand)}
+                  />
+                  {brand}
+                </label>
+              ))}
+            </div>
 
-        <label className="flex items-center space-x-2">
-          <span className="font-medium">Brand:</span>
-          <select
-            className="border p-1 rounded w-32"
-            value={filter.brand}
-            onChange={(e) => setFilter({ ...filter, brand: e.target.value })}
-          >
-            <option value="All">All</option>
-            <option value="Nike">Nike</option>
-            <option value="Adidas">Adidas</option>
-            <option value="Puma">Puma</option>
-          </select>
-        </label>
-      </div>
+            {/* Size Filter */}
+            <div className="mb-4">
+              <h4 className="text-sm font-medium mb-2">Size</h4>
+              <div className="flex flex-wrap gap-2 text-sm">
+                {allSizes.map((size) => (
+                  <label
+                    key={size}
+                    className="border px-2 py-1 rounded cursor-pointer flex items-center"
+                  >
+                    <input
+                      type="checkbox"
+                      className="mr-1"
+                      checked={selectedSizes.includes(size)}
+                      onChange={() => handleSizeChange(size)}
+                    />
+                    {size}
+                  </label>
+                ))}
+              </div>
+            </div>
 
-      {/* Desktop Product Grid */}
-      <div className="hidden sm:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {filteredProducts.map((product, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden"
-          >
-            <img
-              className="h-60 w-full object-cover"
-              src={product.image}
-              alt={product.name}
-            />
-            <div className="p-4">
-              <h5 className="text-xl font-semibold text-slate-900">
-                {product.name}
-              </h5>
-              <div className="mt-2 flex items-center justify-between">
-                <div>
-                  <span className="text-2xl font-bold text-slate-900">
-                    ₹{product.price}
-                  </span>
-                  <span className="text-sm text-slate-500 line-through ml-2">
-                    ₹{product.originalPrice}
-                  </span>
-                </div>
-                <motion.button
-                  className="flex items-center bg-slate-900 text-white text-sm px-4 py-2 rounded-md hover:bg-gray-800"
-                  onClick={() => handleAddToCart(product)}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <FiShoppingCart className="mr-2" /> Shop Now
-                </motion.button>
+            {/* Price Filter */}
+            <div className="mb-2">
+              <h4 className="text-sm font-medium mb-2">Price (Up to)</h4>
+              <input
+                type="range"
+                min="1000000"
+                max="3000000"
+                value={priceRange}
+                onChange={handlePriceChange}
+                className="w-full"
+              />
+              <div className="text-sm text-gray-600 mt-1">
+                Max: Rs. {priceRange.toLocaleString("id-ID")}
               </div>
             </div>
           </div>
-        ))}
-      </div>
+        )}
 
-      {/* Mobile Product Grid */}
-      <div className="grid grid-cols-2 gap-4 sm:hidden">
-        {filteredProducts.map((product, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-2xl shadow-md p-3 flex flex-col items-center text-center"
-          >
-            <img
-              src={product.image}
-              alt={product.name}
-              className="h-28 object-contain mb-2"
-            />
-            <h5 className="text-sm font-medium truncate w-full">
-              {product.name}
-            </h5>
-            <p className="text-base font-bold text-slate-900 mt-1 mb-2">
-              ₹{product.price}
-              <span className="text-xs text-slate-500 line-through ml-1">
-                ₹{product.originalPrice}
-              </span>
-            </p>
-            <motion.button
-              className="w-full mt-auto bg-slate-900 text-white text-xs py-2 rounded-md hover:bg-gray-800 flex items-center justify-center"
-              onClick={() => handleAddToCart(product)}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <FiShoppingCart className="mr-1" /> Shop Now
-            </motion.button>
+        {/* Sort Popup */}
+        {showSort && (
+          <div className="absolute top-24 right-6 w-64 bg-white shadow-lg border rounded-xl p-4 z-50">
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="font-semibold text-sm">Sort By</h3>
+              <button onClick={() => setShowSort(false)}>
+                <FaTimes className="text-gray-600" />
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-2 text-sm">
+              {[
+                { label: "Newest First", value: "newest" },
+                { label: "Price High to Low", value: "highToLow" },
+                { label: "Price Low to High", value: "lowToHigh" },
+                { label: "Alphabetically (A-Z)", value: "az" },
+                { label: "Alphabetically (Z-A)", value: "za" },
+              ].map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => handleSort(option.value)}
+                  className="text-left hover:bg-gray-100 p-2 rounded transition"
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
-        ))}
+        )}
+
+        {/* Product Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 ">
+          {filteredProducts.map((product) => {
+            const discount = Math.round(
+              (1 - product.price / product.offerprice) * 100
+            );
+
+            return (
+              <div
+                key={product.id}
+                className="relative border rounded-xl overflow-hidden p-3 w-full md:max-w-[23rem]  mb-10 shadow-xl bg-white"
+              >
+                <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded">
+                  -{discount}%
+                </div>
+
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full sm:w-40 md:w-44 lg:w-52 xl:w-52 h-auto object-contain mx-auto mb-3"
+                />
+
+                <div className="text-xs text-gray-700 font-semibold mb-1 tracking-wide">
+                  Brand: <span className="font-normal">{product.brand}</span>
+                </div>
+
+                <div className="text-sm font-semibold text-gray-900 leading-tight tracking-tight">
+                  {product.name}
+                </div>
+
+                {/* Show all available sizes */}
+                <div className="text-xs text-gray-600 mb-1">
+                  Sizes: {product.sizes.join(", ")}
+                </div>
+
+                <div className="text-black font-bold text-sm mb-1 tracking-normal">
+                  Rs. {product.price.toLocaleString("id-ID")}
+                </div>
+                <div className="text-xs text-gray-400 line-through tracking-wide">
+                  Rs. {product.offerprice.toLocaleString("id-ID")}
+                </div>
+
+                <button
+                  className="w-full mt-2 bg-black text-white text-xs font-semibold py-2 rounded hover:bg-gray-800 transition"
+                  onClick={() => navigate("/product-details")}
+                >
+                  Add to Cart
+                </button>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default AllProductsList;

@@ -84,7 +84,7 @@ export default function ProductView() {
   const shoeSizes = [40, 41, 42, 43, 44, 45, 56];
 
   return (
-    <div className="container text-black flex flex-col md:flex-row items-center md:items-start justify-center p-4 gap-8 lg:mt-40 md:mt-40">
+    <div className="container text-black flex flex-col md:flex-row items-center md:items-start justify-center p-4 gap-8 lg:mt-40 md:mt-40 mb-10">
       <div className="w-full h-[27rem] md:w-1/2 flex flex-col items-center">
         <div className="hidden md:block">
           <img

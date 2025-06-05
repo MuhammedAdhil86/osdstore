@@ -9,15 +9,15 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState(localStorage.getItem("access_token") || null);
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
     if (token) {
       fetchProfile(token);
     } else {
       setLoading(false);
     }
-  }, []);
+  }, [token]);
 
   const fetchProfile = async (token) => {
     try {
@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
+      setToken(null);
     } finally {
       setLoading(false);
     }
@@ -48,6 +49,7 @@ export const AuthProvider = ({ children }) => {
       if (res.data.access_token) {
         localStorage.setItem("access_token", res.data.access_token);
         localStorage.setItem("refresh_token", res.data.refresh_token);
+        setToken(res.data.access_token); // 🟢 Set token in state
         await fetchProfile(res.data.access_token);
         navigate("/");
       } else {
@@ -61,17 +63,21 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
+    setToken(null); // 🟢 Clear token in state
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     navigate("/loginpage");
   };
 
+  const updateUser = (updatedData) => {
+    setUser(updatedData);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, loading, token, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// ✅ ADD THIS:
 export const useAuth = () => useContext(AuthContext);
