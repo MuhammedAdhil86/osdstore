@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./navbar/navbar";
 import { Outlet } from "react-router-dom";
-import { useAuth } from "../context/AuthContext"; // Adjust path as necessary
-import Login from "../components/login/login"; // Your login modal component
+import { useAuth } from "../context/AuthContext";
+import Login from "../components/login/login";
 import ScrollToTop from "./ScrollToTop";
+import SneakerLoader from "../components/loading/loading"; // ✅ Import it
 
 export default function Layout() {
   const { user, loading } = useAuth();
@@ -25,13 +26,21 @@ export default function Layout() {
 
   return (
     <>
-     <ScrollToTop />
-      <Navbar />
-      <div>
-        <Outlet />
-      </div>
+      {loading ? (
+        <SneakerLoader /> // ✅ Show loader while auth is loading
+      ) : (
+        <>
+          <ScrollToTop />
+          <Navbar />
+          <div>
+            <Outlet />
+          </div>
 
-      {showLoginModal && <Login onClose={() => setShowLoginModal(false)} />}
+          {showLoginModal && (
+            <Login onClose={() => setShowLoginModal(false)} />
+          )}
+        </>
+      )}
     </>
   );
 }

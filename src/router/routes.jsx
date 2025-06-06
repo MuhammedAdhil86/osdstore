@@ -24,7 +24,7 @@ import ReturnPolicy from "../pages/returnpolicy";
 import FAQPage from "../pages/faq";
 import Delivery from "../pages/delivery";
 import ComingSoon from "../pages/comingsoon";
-import SneakerLoader from "../components/loading/loading";
+
 
 const router = createBrowserRouter([
   {
@@ -58,7 +58,7 @@ const router = createBrowserRouter([
       {path: "/FAQ", element:<FAQPage/>},
       {path:"/delivery" , element:<Delivery/>},
       {path:"/soon" , element:<ComingSoon/>},
-      {path:"/loader", element:<SneakerLoader/>},
+   
     ],
   },
 ]);
